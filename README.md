@@ -65,3 +65,5 @@ Update version ships with powershell
 pwsh.exe -noprofile -command "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 ```
 ## Change configuration to procrastination
+Download and copy in path C:~\AppData\Local\Programs\oh-my-posh\themes
+procrastinationcandidate..omp.json 
