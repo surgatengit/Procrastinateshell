@@ -64,6 +64,12 @@ Update version ships with powershell
 ```powershell
 pwsh.exe -noprofile -command "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
 ```
+## Update powershell Help
+```powershell
+Update-Help
+```
+Change l to L in PSReadline Folder on C:\Program Files\WindowsPowerShell\Modules\PSReadline  <-- l to L to properly update help
 ## Change configuration to procrastination
-Download and copy in path C:~\AppData\Local\Programs\oh-my-posh\themes
-procrastinationcandidate..omp.json 
+Download and copy in C:~\AppData\Local\Programs\oh-my-posh\themes
+ 
+https://github.com/surgatengit/Procrastinateshell/blob/main/procrastinationcandidate.omp.json
