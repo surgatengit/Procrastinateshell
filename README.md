@@ -20,7 +20,7 @@ Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download
 ```
 ### Install Oh My Posh
 ```powershell
-winget install oh-my-posh
+winget install JanDeDobbeleer.OhMyPosh -s winget
 ```
 Create profile 
 ```powershell
