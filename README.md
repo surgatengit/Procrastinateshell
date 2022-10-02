@@ -5,10 +5,8 @@
 From a elevated powershell
 ```powershell
 winget install --id Microsoft.Powershell --source winget
+winget install --id=Microsoft.WindowsTerminal -e
 ```
-Install Windows Terminal from winget is not working so
-[Install from windows store. ](https://aka.ms/terminal)
-
 ## Oh My Posh
 
 ### Install Fonts
