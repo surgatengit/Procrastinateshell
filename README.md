@@ -7,6 +7,11 @@ From a elevated powershell
 winget install --id Microsoft.Powershell --source winget
 winget install --id=Microsoft.WindowsTerminal -e
 ```
+Install form msi
+```
+https://github.com/PowerShell/PowerShell/releases
+```
+
 ## Oh My Posh
 
 ### Install Fonts
