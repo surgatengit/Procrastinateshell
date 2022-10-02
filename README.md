@@ -14,7 +14,7 @@ winget install --id=Microsoft.WindowsTerminal -e
 2. Open settings UI in Windows Terminal, in each profile advanced tab select font type CaskaydiaCove NF
 3. Save Changes.
 
-One liner powershell script to install Caskadya Cove Nerd Font
+One line powershell script to install Caskadya Cove Nerd Font
 ```powershell
 Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CascadiaCode.zip -OutFile Fonts.zip & Expand-Archive .\Fonts.zip & start-sleep -s 2 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
 ```
