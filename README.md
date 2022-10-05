@@ -2,6 +2,9 @@
 
 ## Update Powershell and install Windows Terminal
 
+First winget
+https://apps.microsoft.com/store/detail/instalador-de-aplicaci%C3%B3n/9NBLGGH4NNS1?hl=es-es&gl=es
+
 From a elevated powershell
 ```powershell
 winget install --id Microsoft.Powershell --source winget
