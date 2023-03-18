@@ -19,13 +19,13 @@ https://github.com/PowerShell/PowerShell/releases
 ## Oh My Posh
 
 ### Install Fonts
-1. Download Unzip and install Caskadya Cove Nerd Font from `https://www.nerdfonts.com`
-2. Open settings UI in Windows Terminal, in each profile advanced tab select font type CaskaydiaCove NF
+1. Download Unzip and install MesioLGM NF from `https://www.nerdfonts.com`
+2. Open settings UI in Windows Terminal, in each profile advanced tab select font type MesioLGM NF
 3. Save Changes.
 
 One line powershell script to install Caskadya Cove Nerd Font
 ```powershell
-Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/CascadiaCode.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
+Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Meslo.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
 ```
 ### Install Oh My Posh
 ```powershell
