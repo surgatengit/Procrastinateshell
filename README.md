@@ -1,6 +1,6 @@
 # Windows Powershell Terminal Configuration for Procrastination
 
-## Update Powershell and install Windows Terminal
+## Update Powershell and install Windows Terminal (3 options)
 
 First install winget
 ```
