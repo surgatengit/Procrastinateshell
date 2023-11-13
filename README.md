@@ -69,7 +69,7 @@ winget install -e --id Git.Git
 ```
 From an elevated PowerShell
 ```powershell
-PowerShellGet\Install-Module posh-git -Scope CurrentUser -Force
+Install-Module posh-git -Scope CurrentUser -Force
 ```
 ## PSReadline
 Update version ships with powershell
