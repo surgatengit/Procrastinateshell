@@ -38,6 +38,12 @@ Edit profile
 ```powershell
 notepad $PROFILE
 ```
+Execution policy, review and set
+
+```powershell
+Get-ExecutionPolicy -list
+```
+
 Add this lines and save.
 ```powershell
 oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/procrastinatorcandidate.omp.json | Invoke-Expression
@@ -52,8 +58,8 @@ Write-Host (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() ï´
 ``` 
 
 ## Install Terminal Icons
+In powershell 7 console 
 ```powershell
-I think now is not necesary # Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
 Install-Module -Name Terminal-Icons
 ```
 ## Install posh-git
