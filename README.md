@@ -1,19 +1,18 @@
 # Windows Powershell Terminal Configuration for Procrastination
 
-## Update Powershell and install Windows Terminal (3 options)
+## Update Powershell and install Windows Terminal
 
 First install winget
 ```
 https://apps.microsoft.com/store/detail/instalador-de-aplicaci%C3%B3n/9NBLGGH4NNS1?hl=es-es&gl=es
 ```
-From a elevated powershell
-```powershell
+From a elevated cmd
+```console
 winget install --id Microsoft.Powershell --source winget
+```
+Windows Terminal
+```console
 winget install --id=Microsoft.WindowsTerminal -e
-```
-Install form msi
-```
-https://github.com/PowerShell/PowerShell/releases
 ```
 
 ## Oh My Posh
@@ -23,9 +22,9 @@ https://github.com/PowerShell/PowerShell/releases
 2. Open settings UI in Windows Terminal, in each profile advanced tab select font type MesioLGM NF
 3. Save Changes.
 
-One line powershell script to install Caskadya Cove Nerd Font
+One line powershell script to install Meslo Nerd Font
 ```powershell
-Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Meslo.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
+Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
 ```
 ### Install Oh My Posh
 ```powershell
@@ -54,8 +53,8 @@ Write-Host (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() ï´
 
 ## Install Terminal Icons
 ```powershell
-Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
-Install-Module -Name Terminal-Icons -Repository PSGallery
+I think now is not necesary # Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+Install-Module -Name Terminal-Icons
 ```
 ## Install posh-git
 First git must be installed 
@@ -69,7 +68,7 @@ PowerShellGet\Install-Module posh-git -Scope CurrentUser -Force
 ## PSReadline
 Update version ships with powershell
 ```powershell
-pwsh.exe -noprofile -command "Install-Module PSReadLine -Force -SkipPublisherCheck -AllowPrerelease"
+Install-Module PSReadLine -AllowPrerelease -Force
 ```
 ## Update powershell Help
 ```powershell
