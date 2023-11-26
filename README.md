@@ -2,17 +2,17 @@
 
 ## Update Powershell and install Windows Terminal
 
-First install winget (test in win11 23H2 the winget installed not works)
+Mandatary First install winget (test in win11 23H2 the winget installed not works)
 ```
 https://apps.microsoft.com/store/detail/instalador-de-aplicaci%C3%B3n/9NBLGGH4NNS1?hl=es-es&gl=es
 ```
 From a elevated cmd
 ```console
-winget install --id Microsoft.Powershell --source winget
+winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
 ```
 Windows Terminal
 ```console
-winget install --id=Microsoft.WindowsTerminal -e
+winget install --id=Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements --silent
 ```
 
 ## Oh My Posh
