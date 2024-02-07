@@ -2,7 +2,7 @@
 
 ## Update Powershell and install Windows Terminal
 
-Mandatary First install winget (test in win11 23H2 the winget installed not works)
+Copy the link to your browser it install winget (test in win11 23H2 the winget installed not works)
 ```
 https://apps.microsoft.com/store/detail/instalador-de-aplicaci%C3%B3n/9NBLGGH4NNS1?hl=es-es&gl=es
 ```
