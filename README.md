@@ -1,5 +1,10 @@
 # Windows Powershell Terminal Configuration for Procrastination
 
+Winget If you have recently logged in as a user for the first time and find that winget is not yet available 
+you can open PowerShell and enter the following command to request this winget registration.
+```
+Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+```
 ## Update Powershell and install Windows Terminal
 
 Copy the link to your browser it install winget (test in win11 23H2 the winget installed not works)
