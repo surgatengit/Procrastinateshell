@@ -72,7 +72,7 @@ https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastin
 
 Add this lines and save.
 ```powershell
-oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/procrastinatorcandidate.omp.json | Invoke-Expression
+oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/procrastinationcandidate.omp.json | Invoke-Expression
 Import-Module -Name Terminal-Icons
 $env:POSH_GIT_ENABLED = $true
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
@@ -97,14 +97,8 @@ From an elevated PowerShell
 ```powershell
 Install-Module posh-git -Scope CurrentUser -Force
 ```
-## PSReadline
-Update version ships with powershell
-```powershell
-Install-Module PSReadLine -AllowPrerelease -Force
-```
+
 ## Update powershell Help
 ```powershell
 Update-Help
 ```
-Change l to L in PSReadline Folder on C:\Program Files\WindowsPowerShell\Modules\PSReadline  <-- l to L to properly update help
-
