@@ -7,26 +7,25 @@
         {
           "background": "#0077c2",
           "foreground": "#ffffff",
-          "leading_diamond": "\ue0c2",
-          "style": "diamond",
-          "template": "<#0077c2,transparent>\ue0c2</> \uf489 {{ .Name }} ",
-          "trailing_diamond": "\ue0b0",
+          "style": "powerline",
+          "template": " \uf489 {{ .Name }} ",
+          "powerline_symbol": "\ue0b0",
           "type": "shell"
         },
         {
-          "background": "#FFB300",
+          "background": "#a94cce",
           "foreground": "#ffffff",
-          "powerline_symbol": "<transparent,background>\ue0b0</>",
+          "powerline_symbol": "\ue0b0",
           "style": "powerline",
-          "template": " {{ if .SSHSession }}\uf817 {{ end }}{{ .UserName }}\uf286 {{ .HostName }} ",
+          "template": "{{ if .SSHSession }}\uf817{{ end }} \udb80\udc17 {{ .UserName }} \uf286 {{ .HostName }} ",
           "type": "session"
         },
         {
-          "background": "#0FBFCF",
-          "foreground": "#ffffff",
+          "background": "#eee34e",
+          "foreground": "#000000",
           "powerline_symbol": "\ue0b0",
           "properties": {
-            "command": "Write-Host IP (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet)",
+            "command": "Write-Host IP (Get-NetIPAddress -AddressFamily IPv4 | Select-Object -ExpandProperty IPAddress)[0]",
             "shell": "powershell"
           },
           "style": "powerline",
@@ -54,10 +53,9 @@
         {
           "background": "#2e9599",
           "foreground": "#111111",
-          "leading_diamond": "\ue0b2",
-          "style": "diamond",
+          "powerline_symbol": "\ue0b0",
+          "style": "powerline",
           "template": " {{ .CurrentDate | date .Format }} ",
-          "trailing_diamond": "\ue0b4",
           "type": "time"
         }
       ],
@@ -94,7 +92,7 @@
             "style": "full"
           },
           "style": "powerline",
-          "template": " \uf74a  {{ .Path }} ",
+          "template": " \uebc4 {{ .Path }} ",
           "type": "path"
         },
         {
@@ -162,7 +160,7 @@
             "always_enabled": true
           },
           "style": "plain",
-          "template": "<transparent>\ue0b0</> \ufbab{{ .FormattedMs }}\u2800",
+          "template": "<transparent>\ue0b0</> \udb86\udecd {{ .FormattedMs }}\u2800",
           "type": "executiontime"
         },
         {
