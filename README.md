@@ -78,8 +78,9 @@ $env:POSH_GIT_ENABLED = $true
 Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -EditMode Windows
-Write-Host "                                          Alianza Rebelde " -ForegroundColor red
-Write-Host (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() ﴣ
+Write-Host "                  Alianza Rebelde " -ForegroundColor red
+Write-Host "                  󱋌  " -NoNewline
+Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌
 #Get-NetIPConfiguration -InterfaceAlias Ethernet
 ``` 
 
