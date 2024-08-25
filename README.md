@@ -15,6 +15,10 @@ From a elevated cmd
 ```console
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
 ```
+if show a error use
+```
+Add-AppxPackage -Path "https://cdn.winget.microsoft.com/cache/source.msix"
+```
 Windows Terminal
 ```console
 winget install --id=Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements --silent
