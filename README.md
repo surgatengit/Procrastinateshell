@@ -61,6 +61,14 @@ Execution policy, review and set
 Get-ExecutionPolicy -list
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 ```
+Path to themes
+```powershell
+$env:POSH_THEMES_PATH
+```
+Download to that path
+```
+[C:\Users\pedro.SURGATLAND\AppData\Local\Programs\oh-my-posh\themes](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
+```
 
 Add this lines and save.
 ```powershell
@@ -99,7 +107,4 @@ Install-Module PSReadLine -AllowPrerelease -Force
 Update-Help
 ```
 Change l to L in PSReadline Folder on C:\Program Files\WindowsPowerShell\Modules\PSReadline  <-- l to L to properly update help
-## Change configuration to procrastination
-Download and copy in C:~\AppData\Local\Programs\oh-my-posh\themes
- 
-https://github.com/surgatengit/Procrastinateshell/blob/main/procrastinationcandidate.omp.json
+
