@@ -67,7 +67,7 @@ $env:POSH_THEMES_PATH
 ```
 Download to that path
 ```
-[C:\Users\pedro.SURGATLAND\AppData\Local\Programs\oh-my-posh\themes](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
+https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json
 ```
 
 Add this lines and save.
