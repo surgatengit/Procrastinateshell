@@ -26,19 +26,27 @@ winget install --id=Microsoft.WindowsTerminal -e --accept-package-agreements --a
 
 ## Oh My Posh
 
-### Install Fonts
-1. Download Unzip and install Hack Nerd Font from `https://www.nerdfonts.com`
-2. Open settings UI in Windows Terminal, in each profile advanced tab select font type MesioLGM NF
-3. Save Changes.
-
-One line powershell script to install Meslo Nerd Font
-```powershell
-Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
-```
 ### Install Oh My Posh
 ```powershell
 winget install JanDeDobbeleer.OhMyPosh -s winget
 ```
+
+### Install Fonts
+
+New Metod, directly from Oh-My-Posh
+```
+oh-my-posh font install meslo
+```
+Manual way
+1. Download Unzip and install Hack Nerd Font from `https://www.nerdfonts.com`
+2. Open settings UI in Windows Terminal, in each profile advanced tab select font type Meslo NF
+3. Save Changes.
+
+One line powershell script to install Hack Nerd Font
+```powershell
+Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
+```
+
 Create profile 
 ```powershell
 New-Item -Path $PROFILE -Type File -Force
