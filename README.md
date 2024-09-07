@@ -1,77 +1,81 @@
 # Windows Powershell Terminal Configuration for Procrastination
 
-Winget If you have recently logged in as a user for the first time and find that winget is not yet available 
-you can open PowerShell and enter the following command to request this winget registration.
-```
+## Winget
+
+> [!NOTE]
+> Since winget is still in development, it may fail or its installation process and pre-installation on certain systems may change without prior notice. Below are several methods to install it.
+
+If you're logging in for the first time and winget is not available, you can register it by opening PowerShell and running the following command:
+```Powershell
 Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
 ```
 ## Update Powershell and install Windows Terminal
 
-Copy the link to your browser it install winget (test in win11 23H2 the winget installed not works)
+To install winget (tested on Windows 11 23H2), if it's not working properly, use the following link to install it from the Microsoft Store:
 ```
 https://apps.microsoft.com/store/detail/instalador-de-aplicaci%C3%B3n/9NBLGGH4NNS1?hl=es-es&gl=es
 ```
-From a elevated cmd
+From a elevated command prompt (cmd):
 ```console
 winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
 ```
-if show a error use
-```
+If an error occurs, use this command:
+```powershell
 Add-AppxPackage -Path "https://cdn.winget.microsoft.com/cache/source.msix"
 ```
-Windows Terminal
+To install Windows Terminal
 ```console
 winget install --id=Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements --silent
 ```
 
 ## Oh My Posh
 
-### Install Oh My Posh
+Install Oh My Posh with winget:
 ```powershell
 winget install JanDeDobbeleer.OhMyPosh -s winget
 ```
 
 ### Install Fonts
 
-New Metod, directly from Oh-My-Posh
+New Metod, (directly from Oh-My-Posh):
 ```
 oh-my-posh font install meslo
 ```
-Manual way
-1. Download Unzip and install Hack Nerd Font from `https://www.nerdfonts.com`
-2. Open settings UI in Windows Terminal, in each profile advanced tab select font type Meslo NF
-3. Save Changes.
+Manual method:
+1. Download, unzip, and install Hack Nerd Font from `https://www.nerdfonts.com`
+2. In the Windows Terminal settings UI, go to the "Advanced" tab of each profile and select the Meslo NF font.
+3. Save the changes.
 
-One line powershell script to install Hack Nerd Font
+To install Hack Nerd Font via a one-line PowerShell script:
 ```powershell
 Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
 ```
-
-Create profile 
+### Create and Edit Profile
+Create a profile:
 ```powershell
 New-Item -Path $PROFILE -Type File -Force
 ```
-Edit profile
+Edit the profile:
 ```powershell
 notepad $PROFILE
 ```
-Execution policy, review and set
-
+### Set Execution Policy
+Review and set de execution policy:
 ```powershell
 Get-ExecutionPolicy -list
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 ```
-Path to themes
+### Theme Path
+Check the path Oh My Posh themes:
 ```powershell
 $env:POSH_THEMES_PATH
 ```
-Download to that path
-```
-https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json
-```
+Download a custom theme:
 
-Add this lines and save.
-```powershell
+![Custom theme](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
+
+Add the following lines to your profile and save:
+```text
 oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/procrastinationcandidate.omp.json | Invoke-Expression
 Import-Module -Name Terminal-Icons
 $env:POSH_GIT_ENABLED = $true
@@ -85,21 +89,22 @@ Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() ó
 ``` 
 
 ## Install Terminal Icons
-In powershell 7 console 
+In powershell 7, run the following command:
 ```powershell
 Install-Module -Name Terminal-Icons
 ```
 ## Install posh-git
-First git must be installed 
+First install Git: 
 ```powershell
 winget install -e --id Git.Git
 ```
-From an elevated PowerShell
+From an elevated PowerShell window:
 ```powershell
 Install-Module posh-git -Scope CurrentUser -Force
 ```
 
 ## Update powershell Help
+Finally, update the help files:
 ```powershell
 Update-Help
 ```
