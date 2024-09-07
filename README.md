@@ -32,7 +32,7 @@ winget install --id=Microsoft.WindowsTerminal -e --accept-package-agreements --a
 
 Install Oh My Posh with winget:
 ```powershell
-winget install JanDeDobbeleer.OhMyPosh -s winget
+winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
 ```
 
 ### Install Fonts
@@ -40,7 +40,9 @@ winget install JanDeDobbeleer.OhMyPosh -s winget
 New Metod, (directly from Oh-My-Posh):
 ```
 oh-my-posh font install meslo
+oh-my-posh font install hack
 ```
+<!--  No es necesario desde que oh-my-posh incluye instalación directa
 Manual method:
 1. Download, unzip, and install Hack Nerd Font from `https://www.nerdfonts.com`
 2. In the Windows Terminal settings UI, go to the "Advanced" tab of each profile and select the Meslo NF font.
@@ -50,7 +52,10 @@ To install Hack Nerd Font via a one-line PowerShell script:
 ```powershell
 Invoke-WebRequest -Uri https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Hack.zip -OutFile Fonts.zip && Expand-Archive .\Fonts.zip & start-sleep -s 4 && Get-ChildItem -Path ./Fonts -Include '*.ttf','*.ttc','*.otf' -Recurse | ForEach {(New-Object -ComObject Shell.Application).Namespace(0x14).CopyHere($_.FullName,0x10)}
 ```
+-->
 ### Create and Edit Profile
+Close powershell console 5.0 and open terminal, choose powershell 7.x and...
+
 Create a profile:
 ```powershell
 New-Item -Path $PROFILE -Type File -Force
@@ -59,6 +64,7 @@ Edit the profile:
 ```powershell
 notepad $PROFILE
 ```
+<!-- 
 ### Set Execution Policy
 Review and set de execution policy:
 ```powershell
@@ -70,6 +76,7 @@ Check the path Oh My Posh themes:
 ```powershell
 $env:POSH_THEMES_PATH
 ```
+-->
 Download a custom theme:
 
 ![Custom theme](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
@@ -96,7 +103,7 @@ Install-Module -Name Terminal-Icons
 ## Install posh-git
 First install Git: 
 ```powershell
-winget install -e --id Git.Git
+winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements --silent
 ```
 From an elevated PowerShell window:
 ```powershell
