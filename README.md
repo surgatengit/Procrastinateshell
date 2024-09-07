@@ -77,9 +77,6 @@ Check the path Oh My Posh themes:
 $env:POSH_THEMES_PATH
 ```
 -->
-Download a custom theme:
-
-![Custom theme](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
 
 Add the following lines to your profile and save:
 ```text
@@ -94,6 +91,10 @@ Write-Host "                  󱋌  " -NoNewline
 Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌
 #Get-NetIPConfiguration -InterfaceAlias Ethernet
 ``` 
+Download a custom theme to `~/AppData/Local/Programs/oh-my-posh/themes/`
+
+![Custom theme](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
+
 
 ## Install Terminal Icons
 In powershell 7, run the following command:
