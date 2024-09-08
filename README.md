@@ -93,7 +93,7 @@ Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() ó
 ``` 
 Download a custom theme to `~/AppData/Local/Programs/oh-my-posh/themes/`
 
-![Custom theme](https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/procrastinationcandidate.omp.json)
+![pentestcastination.omp.json](https://gist.github.com/surgatengit/f5009b5f484138cdbd895acdfa152805)
 
 
 ## Install Terminal Icons
