@@ -1,4 +1,6 @@
-# Windows Powershell Terminal Configuration for Procrastination
+# Windows Powershell Terminal Configuration
+
+![pentestcatinationShell](https://github.com/user-attachments/assets/73f8e32d-9d5e-4285-920f-af83527dc2fe)
 
 ## Winget
 
