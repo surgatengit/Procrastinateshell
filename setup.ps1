@@ -51,25 +51,6 @@ if (-not (Get-Command wt -ErrorAction SilentlyContinue)) {
     Write-Host "Windows Terminal is already installed."
 }
 
-# Set Hack Nerd Font as default for all Windows Terminal profiles
-try {
-    $terminalProfilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-    if (Test-Path $terminalProfilePath) {
-        $settings = Get-Content -Path $terminalProfilePath -Raw | ConvertFrom-Json
-
-        foreach ($profile in $settings.profiles.list) {
-            $profile.fontFace = "Hack Nerd Font"
-        }
-
-        $settings | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalProfilePath
-        Write-Host "Font set to Hack Nerd Font for all profiles in Windows Terminal."
-    } else {
-        Write-Host "Windows Terminal settings file not found. Skipping font configuration."
-    }
-} catch {
-    Write-Host "Failed to set Hack Nerd Font in Windows Terminal. Continuing..."
-}
-
 # Install Oh My Posh
 if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
     try {
@@ -91,6 +72,25 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     }
 } else {
     Write-Host "Oh My Posh not found, skipping font installation."
+}
+
+# Set Hack Nerd Font as default for all Windows Terminal profiles
+try {
+    $terminalProfilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+    if (Test-Path $terminalProfilePath) {
+        $settings = Get-Content -Path $terminalProfilePath -Raw | ConvertFrom-Json
+
+        foreach ($profile in $settings.profiles.list) {
+            $profile.fontFace = "Hack Nerd Font"
+        }
+
+        $settings | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalProfilePath
+        Write-Host "Font set to Hack Nerd Font for all profiles in Windows Terminal."
+    } else {
+        Write-Host "Windows Terminal settings file not found. Skipping font configuration."
+    }
+} catch {
+    Write-Host "Failed to set Hack Nerd Font in Windows Terminal. Continuing..."
 }
 
 # Get the correct profile path depending on PowerShell version
