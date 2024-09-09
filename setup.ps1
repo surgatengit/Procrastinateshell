@@ -11,6 +11,24 @@ if (-not (Test-Admin)) {
     exit
 }
 
+# Ensure Winget is installed and registered
+try {
+    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+        Write-Host "Winget not found, attempting to install..."
+        Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
+        Start-Sleep -Seconds 10
+
+        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+            throw "Winget installation failed. Exiting script."
+        }
+    } else {
+        Write-Host "Winget is already installed."
+    }
+} catch {
+    Write-Host "Failed to register or install Winget. Exiting script."
+    exit
+}
+
 # Function to check if PowerShell 7+ is running
 function Is-PowerShell7 {
     return $PSVersionTable.PSVersion.Major -ge 7
@@ -31,24 +49,6 @@ if (-not (Is-PowerShell7)) {
     }
 } else {
     Write-Host "PowerShell 7 is already running."
-}
-
-# Ensure Winget is installed and registered
-try {
-    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Host "Winget not found, attempting to install..."
-        Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
-        Start-Sleep -Seconds 10
-
-        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-            throw "Winget installation failed. Exiting script."
-        }
-    } else {
-        Write-Host "Winget is already installed."
-    }
-} catch {
-    Write-Host "Failed to register or install Winget. Exiting script."
-    exit
 }
 
 # Check and install Windows Terminal if not installed
