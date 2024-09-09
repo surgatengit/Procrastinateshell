@@ -12,8 +12,44 @@ if (-not (Test-Admin)) {
 }
 
 # Winget has never worked properly, especially on clean installations, even though it comes pre-installed. The installation is often broken, preventing it from running or updating. The best solution is to install it directly.
-Start-BitsTransfer -Source "https://github.com/microsoft/winget-cli/releases/download/v1.8.1911/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -Destination "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
-Add-AppxPackage -Path "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
+# Function to get the version of Winget
+function Get-WingetVersion {
+    try {
+        $wingetVersion = winget --version
+        return $wingetVersion
+    } catch {
+        return $null
+    }
+}
+
+# Ensure Winget is installed and up-to-date
+$requiredWingetVersion = "v1.8.1911"
+$currentWingetVersion = winget -v
+
+if ($currentWingetVersion -and ($currentWingetVersion -ge $requiredWingetVersion)) {
+    Write-Host "Winget version $currentWingetVersion is already installed and up to date."
+} else {
+    Write-Host "Winget is either not installed or outdated. Installing version $requiredWingetVersion..."
+
+    # Download and install the latest version of Winget
+    try {
+        $wingetUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.8.1911/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+        $wingetDestination = "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
+
+        # Download the msixbundle
+        Write-Host "Downloading Winget from $wingetUrl..."
+        Start-BitsTransfer -Source $wingetUrl -Destination $wingetDestination
+
+        # Install Winget
+        Write-Host "Installing Winget..."
+        Add-AppxPackage -Path $wingetDestination
+
+        Write-Host "Winget version $requiredWingetVersion installed successfully."
+    } catch {
+        Write-Host "Failed to install Winget. Exiting script." -ForegroundColor Red
+        exit
+    }
+}
 
 # Function to check if PowerShell 7+ is running
 function Is-PowerShell7 {
@@ -74,24 +110,36 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     Write-Host "Oh My Posh not found, skipping font installation."
 }
 
-# Set Hack Nerd Font as default for all Windows Terminal profiles
-try {
-    $terminalProfilePath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-    if (Test-Path $terminalProfilePath) {
-        $settings = Get-Content -Path $terminalProfilePath -Raw | ConvertFrom-Json
+# Obtener la ruta de settings.json de Windows Terminal
+$terminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 
-        foreach ($profile in $settings.profiles.list) {
-            $profile.fontFace = "Hack Nerd Font"
-        }
-
-        $settings | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalProfilePath
-        Write-Host "Font set to Hack Nerd Font for all profiles in Windows Terminal."
-    } else {
-        Write-Host "Windows Terminal settings file not found. Skipping font configuration."
-    }
-} catch {
-    Write-Host "Failed to set Hack Nerd Font in Windows Terminal. Continuing..."
+# Asegurarse de que settings.json existe antes de intentar modificarlo
+if (-not (Test-Path $terminalSettingsPath)) {
+    Write-Host "Settings.json not found. Please ensure Windows Terminal is installed and run at least once." -ForegroundColor Red
+    exit
 }
+
+# Leer el contenido del archivo settings.json
+$settingsJson = Get-Content -Path $terminalSettingsPath -Raw | ConvertFrom-Json
+
+# Crear la sección 'defaults' si no existe
+if (-not $settingsJson.profiles.defaults) {
+    $settingsJson.profiles.defaults = @{
+        font = @{
+            face = "Hack Nerd Font"
+        }
+    }
+} else {
+    # Modificar la fuente en la sección defaults
+    $settingsJson.profiles.defaults.font = @{
+        face = "Hack Nerd Font"
+    }
+}
+
+# Guardar los cambios de nuevo en settings.json
+$settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsPath -Force
+
+Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
 
 # Get the correct profile path depending on PowerShell version
 $profilePath = if (Is-PowerShell7) {
