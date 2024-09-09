@@ -11,23 +11,9 @@ if (-not (Test-Admin)) {
     exit
 }
 
-# Ensure Winget is installed and registered
-try {
-    if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-        Write-Host "Winget not found, attempting to install..."
-        Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
-        Start-Sleep -Seconds 10
-
-        if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
-            throw "Winget installation failed. Exiting script."
-        }
-    } else {
-        Write-Host "Winget is already installed."
-    }
-} catch {
-    Write-Host "Failed to register or install Winget. Exiting script."
-    exit
-}
+# Winget has never worked properly, especially on clean installations, even though it comes pre-installed. The installation is often broken, preventing it from running or updating. The best solution is to install it directly.
+Start-BitsTransfer -Source "https://github.com/microsoft/winget-cli/releases/download/v1.8.1911/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -Destination "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
+Add-AppxPackage -Path "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
 
 # Function to check if PowerShell 7+ is running
 function Is-PowerShell7 {
