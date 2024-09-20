@@ -26,7 +26,7 @@ Features:
 Spanish, 64-bit
 Generic Pro N for Workstations license.
 
-- [x] GPT with recovery on C:
+- [x] GPT partition layout with recovery on C:
 - [x] Always show file extensions.
 - [x] No news or weather widget.
 - [x] Classic right-click menu.
