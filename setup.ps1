@@ -1,4 +1,4 @@
-# Script created to be run after the Windows installation is complete. It installs essential programs and possibly the best shell configuration ever made: ProcrastinateShell.
+# Script designed to be run after a fresh Windows installation or format. It installs essential programs and what might be the best shell configuration ever created: ProcrastinateShell.
 
 # Function to check if script is running as administrator
 function Test-Admin {
