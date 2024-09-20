@@ -1,5 +1,7 @@
 # Windows Powershell Terminal Configuration
 
+Update, automatic setup.ps1 for fresh windows installation.
+
 ![pentestcatinationShell](https://github.com/user-attachments/assets/73f8e32d-9d5e-4285-920f-af83527dc2fe)
 
 # Install script (Recommended)
@@ -8,7 +10,7 @@ Download setup.ps1 and run from elevated powershell
 
 # Manual installation
 ## Winget
-
+<!-- 
 > [!NOTE]
 > Since winget is still in development, it may fail or its installation process and pre-installation on certain systems may change without prior notice. Below are several methods to install it.
 
@@ -16,7 +18,8 @@ If you're logging in for the first time and winget is not available, you can reg
 ```Powershell
 Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe
 ```
-## Update Powershell and install Windows Terminal
+-->
+## Install or Update: Winget, Powershell and Windows Terminal
 
 To install winget (tested on Windows 11 23H2), if it's not working properly, use the following link to install it from the Microsoft Store:
 ```
