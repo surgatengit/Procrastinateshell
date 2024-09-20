@@ -97,21 +97,45 @@ if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
         winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
         Write-Host "Oh My Posh installed successfully. Reload"
         
-        Start-Sleep -Seconds 2
+        Start-Sleep -Seconds 1
         # lanzar otro powershell, para poder cargar los comandos de Oh My Posh
         $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
         Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
+        Start-Sleep -Seconds 1
+        exit
     } catch {
         Write-Host "Oh My Posh installation failed. Continuing..."
     }
 }
 
+# Check if the font is already installed
+function Is-FontInstalled {
+    param (
+        [string]$FontName
+    )
+    
+    $fontsPath = "$env:WINDIR\Fonts"
+    $installedFonts = Get-ChildItem -Path $fontsPath -Include "*.ttf", "*.otf" -Recurse | Select-String -Pattern $FontName
+
+    return $installedFonts.Count -gt 0
+}
+
 # Install Meslo Nerd Font and Hack Nerd Font via Oh My Posh if Oh My Posh is installed
 if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     try {
-        oh-my-posh font install meslo
-        oh-my-posh font install hack
-        Write-Host "Meslo Nerd and Hack Nerd Font installed successfully."
+        if (-not (Is-FontInstalled "Meslo")) {
+            oh-my-posh font install meslo
+            Write-Host "Meslo Nerd Font installed successfully."
+        } else {
+            Write-Host "Meslo Nerd Font is already installed."
+        }
+        
+        if (-not (Is-FontInstalled "Hack")) {
+            oh-my-posh font install hack
+            Write-Host "Hack Nerd Font installed successfully."
+        } else {
+            Write-Host "Hack Nerd Font is already installed."
+        }
     } catch {
         Write-Host "Failed to install Meslo and Hack Nerd Font using Oh My Posh. Continuing..."
     }
