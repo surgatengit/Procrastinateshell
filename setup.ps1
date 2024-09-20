@@ -142,16 +142,10 @@ if (-not $settingsJson.profiles.defaults.font) {
 }
 
 # Modificar las propiedades del perfil 'defaults'
-$settingsJson.profiles.defaults.adjustIndistinguishableColors = "never"
-$settingsJson.profiles.defaults."experimental.retroTerminalEffect" = $false
-$settingsJson.profiles.defaults.font.face = "MesloLGM NF"
-$settingsJson.profiles.defaults.intenseTextStyle = "none"
-$settingsJson.profiles.defaults.opacity = 96
-$settingsJson.profiles.defaults.useAcrylic = $false
+$settingsJson.profiles.defaults.font.face = "Hack Nerd Font"
 
 # Guardar los cambios de nuevo en settings.json
 $settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsPath -Force
-
 
 Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
 
@@ -228,6 +222,70 @@ if (Get-Command git -ErrorAction SilentlyContinue) {
     }
 } else {
     Write-Host "Git not found, skipping posh-git installation."
+}
+
+# Install Firefox
+try {
+    winget install -e --id Mozilla.Firefox --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Firefox installed successfully."
+} catch {
+    Write-Host "Firefox installation failed. Continuing..."
+}
+
+# Install LightShot
+try {
+    winget install -e --id Skillbrains.Lightshot --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Lightshot installed successfully."
+} catch {
+    Write-Host "Lightshot installation failed. Continuing..."
+}
+
+# Install MobaXterm
+try {
+    winget install -e --id Mobatek.MobaXterm --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "MobaXterm installed successfully."
+} catch {
+    Write-Host "MobaXterm installation failed. Continuing..."
+}
+
+# Install Nmap
+try {
+    winget install -e --id Insecure.Nmap --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Nmap installed successfully."
+} catch {
+    Write-Host "Nmap installation failed. Continuing..."
+}
+
+# Install Powertoys
+try {
+    winget install -e --id Microsoft.PowerToys --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "PowerToys installed successfully."
+} catch {
+    Write-Host "PowerToys installation failed. Continuing..."
+}
+
+# Install VisualStudioCode
+try {
+    winget install -e --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Visual Studio Code installed successfully."
+} catch {
+    Write-Host "Visual Studio Code installation failed. Continuing..."
+}
+
+# Install 7zip
+try {
+    winget install -e --id 7zip.7zip --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "7zip installed successfully."
+} catch {
+    Write-Host "7zip installation failed. Continuing..."
+}
+
+# Install Obsidian
+try {
+    winget install -e --id Obsidian.Obsidian --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Obsidian installed successfully."
+} catch {
+    Write-Host "Obsidian installation failed. Continuing..."
 }
 
 # Update PowerShell Help
