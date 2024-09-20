@@ -4,11 +4,11 @@ Update, automatic setup.ps1 for fresh windows installation.
 
 ![pentestcatinationShell](https://github.com/user-attachments/assets/73f8e32d-9d5e-4285-920f-af83527dc2fe)
 
-# Install script (Recommended)
-Download setup.ps1 and run from elevated powershell 
+# Automatic Install Script (Recommended)
+Please download setup.ps1 and run from elevated powershell.
 
 
-# Manual installation
+# Manual installation (not-updated)
 ## Winget
 <!-- 
 > [!NOTE]
