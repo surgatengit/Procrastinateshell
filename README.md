@@ -55,12 +55,18 @@ Generic Pro N for Workstations license.
 > [!NOTE]
 > An internet connection is required for the setup, but it won't ask you to use a Microsoft account or anything like that.
 ----
-# Only the Automatic Install Script
+## You can also use the Automatic Install Script
+The script ensures that the latest versions of winget, PowerShell, and Windows Terminal are functioning correctly on the system. It also customizes PowerShell 7 and installs or updates to the latest version the previously mentioned programs, in case they were not already installed or up to date.
+This automated process streamlines the setup and maintenance of essential tools, ensuring that the user always has access to the most recent features and security updates.
 > Download setup.ps1 and run from elevated powershell.
-# Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern windows and windows server.
+# Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern Windows, server flavour too.
 # Marvelous! :point_left:
 
-# 3- The procrastinateShell:
+# The procrastinateShell:
+This is a customization for any shell, although it's primarily designed for PowerShell. Its main purpose is to provide contextual information and enhance screenshots taken during various penetration testing scenarios. However, it also includes additional features simply because they can be implemented and might prove useful.
+
+The customization aims to streamline the pentesting process by offering relevant data at a glance, making it easier to document findings and maintain situational awareness. While its core functionality focuses on penetration testing, the versatility of this customization allows it to be adapted for other command-line work as well.
+
 ![pentestcatinationShell](https://github.com/user-attachments/assets/73f8e32d-9d5e-4285-920f-af83527dc2fe)
 
 ## Thanks to:
