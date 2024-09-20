@@ -257,68 +257,34 @@ if (Get-Command git -ErrorAction SilentlyContinue) {
     Write-Host "Git not found, skipping posh-git installation."
 }
 
-# Install Firefox
-try {
-    winget install -e --id Mozilla.Firefox --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "Firefox installed successfully."
-} catch {
-    Write-Host "Firefox installation failed. Continuing..."
+function Install-App {
+    param (
+        [string]$AppId,
+        [string]$AppName
+    )
+    try {
+        winget install -e --id $AppId --accept-package-agreements --accept-source-agreements --silent
+        Write-Host "$AppName installed successfully."
+    } catch {
+        Write-Host "$AppName installation failed. Continuing..."
+    }
 }
 
-# Install LightShot
-try {
-    winget install -e --id Skillbrains.Lightshot --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "Lightshot installed successfully."
-} catch {
-    Write-Host "Lightshot installation failed. Continuing..."
-}
+# Lista de aplicaciones a instalar
+$apps = @(
+    @{ id = "Mozilla.Firefox"; name = "Firefox" },
+    @{ id = "Skillbrains.Lightshot"; name = "Lightshot" },
+    @{ id = "Mobatek.MobaXterm"; name = "MobaXterm" },
+    @{ id = "Insecure.Nmap"; name = "Nmap" },
+    @{ id = "Microsoft.PowerToys"; name = "PowerToys" },
+    @{ id = "Microsoft.VisualStudioCode"; name = "Visual Studio Code" },
+    @{ id = "7zip.7zip"; name = "7zip" },
+    @{ id = "Obsidian.Obsidian"; name = "Obsidian" }
+)
 
-# Install MobaXterm
-try {
-    winget install -e --id Mobatek.MobaXterm --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "MobaXterm installed successfully."
-} catch {
-    Write-Host "MobaXterm installation failed. Continuing..."
-}
-
-# Install Nmap
-try {
-    winget install -e --id Insecure.Nmap --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "Nmap installed successfully."
-} catch {
-    Write-Host "Nmap installation failed. Continuing..."
-}
-
-# Install Powertoys
-try {
-    winget install -e --id Microsoft.PowerToys --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "PowerToys installed successfully."
-} catch {
-    Write-Host "PowerToys installation failed. Continuing..."
-}
-
-# Install VisualStudioCode
-try {
-    winget install -e --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "Visual Studio Code installed successfully."
-} catch {
-    Write-Host "Visual Studio Code installation failed. Continuing..."
-}
-
-# Install 7zip
-try {
-    winget install -e --id 7zip.7zip --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "7zip installed successfully."
-} catch {
-    Write-Host "7zip installation failed. Continuing..."
-}
-
-# Install Obsidian
-try {
-    winget install -e --id Obsidian.Obsidian --accept-package-agreements --accept-source-agreements --silent
-    Write-Host "Obsidian installed successfully."
-} catch {
-    Write-Host "Obsidian installation failed. Continuing..."
+# Instalar todas las aplicaciones
+foreach ($app in $apps) {
+    Install-App -AppId $app.id -AppName $app.name
 }
 
 # Update PowerShell Help
