@@ -1,6 +1,6 @@
 # Autounattend, installation script and ProcrastinateShell
 
-## 1- autounattend.xml File
+## Autounattend.xml File
 > Unattended installation of Windows, using the configuration listed below and the ProcrastinateShell script.
 
 ### How to use:
@@ -55,9 +55,10 @@ Generic Pro N for Workstations license.
 > [!NOTE]
 > An internet connection is required for the setup, but it won't ask you to use a Microsoft account or anything like that.
 ----
-# 2- Automatic Install Script for any windows system.
+# Only the Automatic Install Script
 > Download setup.ps1 and run from elevated powershell.
-# Programs and :star2: ProcrastinateShell :star2: will be installed. :point_left: Marvelous!
+# Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern windows and windows server.
+# Marvelous! :point_left:
 
 # 3- The procrastinateShell:
 ![pentestcatinationShell](https://github.com/user-attachments/assets/73f8e32d-9d5e-4285-920f-af83527dc2fe)
