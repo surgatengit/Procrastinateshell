@@ -98,13 +98,11 @@ if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
     try {
         winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
         Write-Host "Oh My Posh installed successfully. Reload"
-        
-        Start-Sleep -Seconds 1
-        # Launch another PowerShell to load the Oh My Posh commands
+        Start-Sleep -Seconds 2
         $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
-        Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
-        Start-Sleep -Seconds 1
-        exit
+        Start-Process "pwsh" -ArgumentList "-NoProfile -NoExit -File `"$desktopPath`""
+        # Revisar si poner un exit debajo
+        
     } catch {
         Write-Host "Oh My Posh installation failed. Continuing..."
     }
@@ -132,7 +130,7 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
             Write-Host "Meslo Nerd Font is already installed."
         }
         
-        if (-not (Is-FontInstalled "Hack")) {
+        if (-not (Is-FontInstalled "hack")) {
             oh-my-posh font install hack
             Write-Host "Hack Nerd Font installed successfully."
         } else {
