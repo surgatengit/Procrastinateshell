@@ -125,16 +125,10 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     try {
         if (-not (Is-FontInstalled "Meslo")) {
             oh-my-posh font install meslo
-            Write-Host "Meslo Nerd Font installed successfully."
+            oh-my-posh font install hack
+            Write-Host "Meslo and Hack both from Nerd Font installed successfully."
         } else {
             Write-Host "Meslo Nerd Font is already installed."
-        }
-        
-        if (-not (Is-FontInstalled "hack")) {
-            oh-my-posh font install hack
-            Write-Host "Hack Nerd Font installed successfully."
-        } else {
-            Write-Host "Hack Nerd Font is already installed."
         }
     } catch {
         Write-Host "Failed to install Meslo and Hack Nerd Font using Oh My Posh. Continuing..."
