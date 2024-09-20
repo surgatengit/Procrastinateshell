@@ -62,8 +62,12 @@ if (-not (Is-PowerShell7)) {
     try {
         winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
         Write-Host "PowerShell 7 installed successfully."
+        Write-Host "Continue in PowerShell 7."
+        Start-Sleep -Seconds 2
+        # cambiar a powershell 7
+        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
+        Start-Process "pwsh" -ArgumentList "-NoProfile -NoExit -File `"$desktopPath`""
 
-        Write-Host "Please continue in PowerShell 7 running has administrator"
         exit
     } catch {
         Write-Host "PowerShell 7 installation failed. Exiting script."
@@ -91,7 +95,12 @@ if (-not (Get-Command wt -ErrorAction SilentlyContinue)) {
 if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
     try {
         winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
-        Write-Host "Oh My Posh installed successfully."
+        Write-Host "Oh My Posh installed successfully. Reload"
+        
+        Start-Sleep -Seconds 2
+        # lanzar otro powershell, para poder cargar los comandos de Oh My Posh
+        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
+        Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
     } catch {
         Write-Host "Oh My Posh installation failed. Continuing..."
     }
