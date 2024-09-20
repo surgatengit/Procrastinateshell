@@ -1,0 +1,961 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State">
+	<!--https://schneegans.de/windows/unattend-generator/?LanguageMode=Unattended&UILanguage=es-ES&Locale=es-ES&Keyboard=0000040a&GeoLocation=217&ProcessorArchitecture=amd64&BypassNetworkCheck=true&ComputerNameMode=Random&TimeZoneMode=Explicit&TimeZone=Romance+Standard+Time&PartitionMode=Unattended&PartitionLayout=GPT&EspSize=300&RecoveryMode=Folder&WindowsEditionMode=Unattended&WindowsEdition=pro_workstations_n&UserAccountMode=Unattended&AccountName0=Admin&AccountPassword0=Zaq123456&AccountGroup0=Administrators&AccountName1=Usuario&AccountPassword1=Zaq123456&AccountGroup1=Users&AccountName2=&AccountName3=&AccountName4=&AutoLogonMode=Own&PasswordExpirationMode=Unlimited&LockoutMode=Default&HideFiles=Hidden&ShowFileExtensions=true&DisableWidgets=true&ClassicContextMenu=true&LeftTaskbar=true&DeleteTaskbarIcons=true&HideEdgeFre=true&ShowAllTrayIcons=true&DisableFastStartup=true&EnableLongPaths=true&AllowPowerShellScripts=true&DisableLastAccess=true&TurnOffSystemSounds=true&DisableAppSuggestions=true&WifiMode=Skip&ExpressSettings=DisableAll&KeysMode=Skip&WallpaperMode=Default&Remove3DViewer=true&RemoveBingSearch=true&RemoveCamera=true&RemoveClipchamp=true&RemoveCortana=true&RemoveDevHome=true&RemoveFamily=true&RemoveFeedbackHub=true&RemoveInternetExplorer=true&RemoveMailCalendar=true&RemoveMaps=true&RemoveMathInputPanel=true&RemoveMixedReality=true&RemoveZuneVideo=true&RemoveNews=true&RemoveNotepadClassic=true&RemoveOffice365=true&RemoveOneDrive=true&RemoveOneNote=true&RemoveOpenSSHClient=true&RemoveOutlook=true&RemovePaint=true&RemovePaint3D=true&RemovePeople=true&RemovePhotos=true&RemovePowerAutomate=true&RemovePowerShellISE=true&RemoveQuickAssist=true&RemoveRecall=true&RemoveSkype=true&RemoveSolitaire=true&RemoveStepsRecorder=true&RemoveStickyNotes=true&RemoveTeams=true&RemoveGetStarted=true&RemoveToDo=true&RemoveVoiceRecorder=true&RemoveWeather=true&RemoveWindowsMediaPlayer=true&RemoveZuneMusic=true&RemoveWordPad=true&RemoveXboxApps=true&RemoveYourPhone=true&FirstLogonScript0=%23+Script+designed+to+be+run+after+a+fresh+Windows+installation+or+format.+It+installs+essential+programs+and+what+might+be+the+best+shell+configuration+ever+created%3A+ProcrastinateShell.%0D%0A%0D%0A%23+Function+to+check+if+script+is+running+as+administrator%0D%0Afunction+Test-Admin+%7B%0D%0A++++%24currentIdentity+%3D+%5BSecurity.Principal.WindowsIdentity%5D%3A%3AGetCurrent%28%29%0D%0A++++%24principal+%3D+New-Object+Security.Principal.WindowsPrincipal%28%24currentIdentity%29%0D%0A++++return+%24principal.IsInRole%28%5BSecurity.Principal.WindowsBuiltInRole%5D%3A%3AAdministrator%29%0D%0A%7D%0D%0A%0D%0A%23+Check+for+elevated+permissions%0D%0Aif+%28-not+%28Test-Admin%29%29+%7B%0D%0A++++Write-Host+%22This+script+requires+elevated+privileges+%28Administrator%29.+Please+run+as+Administrator.%22+-ForegroundColor+Red%0D%0A++++exit%0D%0A%7D%0D%0A%0D%0A%23+Winget+has+never+worked+properly%2C+especially+on+clean+installations%2C+even+though+it+comes+pre-installed.+The+installation+is+often+broken%2C+preventing+it+from+running+or+updating.+The+best+solution+is+to+install+it+directly.%0D%0A%23+Function+to+get+the+version+of+Winget%0D%0Afunction+Get-WingetVersion+%7B%0D%0A++++try+%7B%0D%0A++++++++%24wingetVersion+%3D+winget+%2D%2Dversion%0D%0A++++++++return+%24wingetVersion%0D%0A++++%7D+catch+%7B%0D%0A++++++++return+%24null%0D%0A++++%7D%0D%0A%7D%0D%0A%0D%0A%23+Ensure+Winget+is+installed+and+up-to-date%0D%0A%24requiredWingetVersion+%3D+%22v1.8.1911%22%0D%0A%24currentWingetVersion+%3D+winget+-v%0D%0A%0D%0Aif+%28%24currentWingetVersion+-and+%28%24currentWingetVersion+-ge+%24requiredWingetVersion%29%29+%7B%0D%0A++++Write-Host+%22Winget+version+%24currentWingetVersion+is+already+installed+and+up+to+date.%22%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22Winget+is+either+not+installed+or+outdated.+Installing+version+%24requiredWingetVersion...%22%0D%0A%0D%0A++++%23+Download+and+install+the+latest+version+of+Winget%0D%0A++++try+%7B%0D%0A++++++++%24wingetUrl+%3D+%22https%3A%2F%2Fgithub.com%2Fmicrosoft%2Fwinget-cli%2Freleases%2Fdownload%2Fv1.8.1911%2FMicrosoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle%22%0D%0A++++++++%24wingetDestination+%3D+%22%24env%3AUSERPROFILE%5CDownloads%5CMicrosoft.DesktopAppInstaller.msixbundle%22%0D%0A%0D%0A++++++++%23+Download+the+msixbundle%0D%0A++++++++Write-Host+%22Downloading+Winget+from+%24wingetUrl...%22%0D%0A++++++++Start-BitsTransfer+-Source+%24wingetUrl+-Destination+%24wingetDestination%0D%0A%0D%0A++++++++%23+Install+Winget%0D%0A++++++++Write-Host+%22Installing+Winget...%22%0D%0A++++++++Add-AppxPackage+-Path+%24wingetDestination%0D%0A%0D%0A++++++++Write-Host+%22Winget+version+%24requiredWingetVersion+installed+successfully.%22%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Failed+to+install+Winget.+Exiting+script.%22+-ForegroundColor+Red%0D%0A++++++++exit%0D%0A++++%7D%0D%0A%7D%0D%0A%0D%0A%23+Function+to+check+if+PowerShell+7%2B+is+running%0D%0Afunction+Is-PowerShell7+%7B%0D%0A++++return+%24PSVersionTable.PSVersion.Major+-ge+7%0D%0A%7D%0D%0A%0D%0A%23+Ensure+we%27re+running+PowerShell+7%2C+if+not%2C+install+it+and+exit+the+script%0D%0Aif+%28-not+%28Is-PowerShell7%29%29+%7B%0D%0A++++Write-Host+%22PowerShell+7+or+higher+is+required.+Installing+PowerShell+7...%22%0D%0A++++try+%7B%0D%0A++++++++winget+install+%2D%2Did+Microsoft.Powershell+%2D%2Dsource+winget+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++++++Write-Host+%22PowerShell+7+installed+successfully.%22%0D%0A++++++++Write-Host+%22Continue+in+PowerShell+7.%22%0D%0A++++++++Start-Sleep+-Seconds+2%0D%0A++++++++%23+Switch+to+powershell+7%0D%0A++++++++%24desktopPath+%3D+%5BSystem.IO.Path%5D%3A%3ACombine%28%24env%3AUSERPROFILE%2C+%22Desktop%22%2C+%22setup.ps1%22%29%0D%0A++++++++Start-Process+%22pwsh%22+-ArgumentList+%22-NoProfile+-NoExit+-File+%60%22%24desktopPath%60%22%22%0D%0A%0D%0A++++++++exit%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22PowerShell+7+installation+failed.+Exiting+script.%22%0D%0A++++++++exit%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22PowerShell+7+is+already+running.%22%0D%0A%7D%0D%0A%0D%0A%23+Check+and+install+Windows+Terminal+if+not+installed%0D%0Aif+%28-not+%28Get-Command+wt+-ErrorAction+SilentlyContinue%29%29+%7B%0D%0A++++Write-Host+%22Windows+Terminal+not+found%2C+installing...%22%0D%0A++++try+%7B%0D%0A++++++++winget+install+%2D%2Did+Microsoft.WindowsTerminal+-e+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++++++Write-Host+%22Windows+Terminal+installed+successfully.%22%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Windows+Terminal+installation+failed.+Exiting+script.%22%0D%0A++++++++exit%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22Windows+Terminal+is+already+installed.%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Oh+My+Posh%0D%0Aif+%28-not+%28Get-Command+oh-my-posh+-ErrorAction+SilentlyContinue%29%29+%7B%0D%0A++++try+%7B%0D%0A++++++++winget+install+JanDeDobbeleer.OhMyPosh+-s+winget+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++++++Write-Host+%22Oh+My+Posh+installed+successfully.+Reload%22%0D%0A++++++++%0D%0A++++++++Start-Sleep+-Seconds+1%0D%0A++++++++%23+Launch+another+PowerShell+to+load+the+Oh+My+Posh+commands%0D%0A++++++++%24desktopPath+%3D+%5BSystem.IO.Path%5D%3A%3ACombine%28%24env%3AUSERPROFILE%2C+%22Desktop%22%2C+%22setup.ps1%22%29%0D%0A++++++++Start-Process+%22pwsh%22+-ArgumentList+%22-NoProfile+-File+%60%22%24desktopPath%60%22%22%0D%0A++++++++Start-Sleep+-Seconds+1%0D%0A++++++++exit%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Oh+My+Posh+installation+failed.+Continuing...%22%0D%0A++++%7D%0D%0A%7D%0D%0A%0D%0A%23+Check+if+the+font+is+already+installed%0D%0Afunction+Is-FontInstalled+%7B%0D%0A++++param+%28%0D%0A++++++++%5Bstring%5D%24FontName%0D%0A++++%29%0D%0A++++%0D%0A++++%24fontsPath+%3D+%22%24env%3AWINDIR%5CFonts%22%0D%0A++++%24installedFonts+%3D+Get-ChildItem+-Path+%24fontsPath+-Include+%22*.ttf%22%2C+%22*.otf%22+-Recurse+%7C+Select-String+-Pattern+%24FontName%0D%0A%0D%0A++++return+%24installedFonts.Count+-gt+0%0D%0A%7D%0D%0A%0D%0A%23+Install+Meslo+Nerd+Font+and+Hack+Nerd+Font+via+Oh+My+Posh+if+Oh+My+Posh+is+installed%0D%0Aif+%28Get-Command+oh-my-posh+-ErrorAction+SilentlyContinue%29+%7B%0D%0A++++try+%7B%0D%0A++++++++if+%28-not+%28Is-FontInstalled+%22Meslo%22%29%29+%7B%0D%0A++++++++++++oh-my-posh+font+install+meslo%0D%0A++++++++++++Write-Host+%22Meslo+Nerd+Font+installed+successfully.%22%0D%0A++++++++%7D+else+%7B%0D%0A++++++++++++Write-Host+%22Meslo+Nerd+Font+is+already+installed.%22%0D%0A++++++++%7D%0D%0A++++++++%0D%0A++++++++if+%28-not+%28Is-FontInstalled+%22Hack%22%29%29+%7B%0D%0A++++++++++++oh-my-posh+font+install+hack%0D%0A++++++++++++Write-Host+%22Hack+Nerd+Font+installed+successfully.%22%0D%0A++++++++%7D+else+%7B%0D%0A++++++++++++Write-Host+%22Hack+Nerd+Font+is+already+installed.%22%0D%0A++++++++%7D%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Failed+to+install+Meslo+and+Hack+Nerd+Font+using+Oh+My+Posh.+Continuing...%22%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22Oh+My+Posh+not+found%2C+skipping+font+installation.%22%0D%0A%7D%0D%0A%0D%0A%23+Get+the+path+of+settings.json+from+Windows+Terminal%0D%0A%24terminalSettingsPath+%3D+%22%24env%3ALOCALAPPDATA%5CPackages%5CMicrosoft.WindowsTerminal_8wekyb3d8bbwe%5CLocalState%5Csettings.json%22%0D%0A%0D%0A%23+Ensure+that+settings.json+exists+before+attempting+to+modify+it%0D%0Aif+%28-not+%28Test-Path+%24terminalSettingsPath%29%29+%7B%0D%0A++++Write-Host+%22Settings.json+not+found.+Please+ensure+Windows+Terminal+is+installed+and+run+at+least+once.%22+-ForegroundColor+Red%0D%0A++++exit%0D%0A%7D%0D%0A%0D%0A%23+Read+the+settings.json+file%0D%0A%24settingsJson+%3D+Get-Content+-Path+%24terminalSettingsPath+-Raw+%7C+ConvertFrom-Json%0D%0A%0D%0A%23+Create+the+%27defaults%27+section+if+it+doesn%27t+exist.%0D%0Aif+%28-not+%24settingsJson.profiles.defaults%29+%7B%0D%0A++++%24settingsJson.profiles.defaults+%3D+%40%7B%7D%0D%0A%7D%0D%0A%0D%0A%23+Create+the+%27font%27+section+if+it+doesn%27t+exist.%0D%0Aif+%28-not+%24settingsJson.profiles.defaults.font%29+%7B%0D%0A++++%24settingsJson.profiles.defaults+%7C+Add-Member+-MemberType+NoteProperty+-Name+%22font%22+-Value+%40%7B%7D%0D%0A%7D%0D%0A%0D%0A%24settingsJson.profiles.defaults.font.face+%3D+%22Hack+Nerd+Font%22%0D%0A%0D%0A%23+Save+changes+to+settings.json%0D%0A%24settingsJson+%7C+ConvertTo-Json+-Depth+100+%7C+Set-Content+-Path+%24terminalSettingsPath+-Force%0D%0A%0D%0AWrite-Host+%22Settings.json+updated+with+Hack+Nerd+Font+and+profiles.%22+-ForegroundColor+Green%0D%0A%0D%0A%23+Get+the+correct+profile+path+depending+on+PowerShell+version%0D%0A%24profilePath+%3D+if+%28Is-PowerShell7%29+%7B%0D%0A++++%22%24env%3AUSERPROFILE%5CDocuments%5CPowerShell%5CMicrosoft.PowerShell_profile.ps1%22%0D%0A%7D+else+%7B%0D%0A++++%22%24env%3AUSERPROFILE%5CDocuments%5CWindowsPowerShell%5Cprofile.ps1%22%0D%0A%7D%0D%0A%0D%0A%23+Create+and+edit+PowerShell+profile%0D%0Atry+%7B%0D%0A++++if+%28-not+%28Test-Path+%24profilePath%29%29+%7B%0D%0A++++++++New-Item+-Path+%24profilePath+-Type+File+-Force%0D%0A++++%7D%0D%0A%0D%0A++++%24profileContent+%3D+Get-Content+-Path+%24profilePath+-Raw%0D%0A%0D%0A++++function+Add-IfNotExists%28%24path%2C+%24content%29+%7B%0D%0A++++++++if+%28-not+%28%24profileContent+-contains+%24content%29%29+%7B%0D%0A++++++++++++Add-Content+-Path+%24path+-Value+%24content%0D%0A++++++++%7D%0D%0A++++%7D%0D%0A%0D%0A++++Add-IfNotExists+%24profilePath+%27oh-my-posh+init+pwsh+%2D%2Dconfig+%7E%2FAppData%2FLocal%2FPrograms%2Foh-my-posh%2Fthemes%2Fpentescatination.omp.json+%7C+Invoke-Expression%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Import-Module+-Name+Terminal-Icons%27%0D%0A++++Add-IfNotExists+%24profilePath+%27%24env%3APOSH_GIT_ENABLED+%3D+%24true%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Set-PSReadLineOption+-PredictionSource+HistoryAndPlugin%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Set-PSReadLineOption+-PredictionViewStyle+ListView%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Set-PSReadLineOption+-EditMode+Windows%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Write-Host+%22++++++++++++++++%EF%87%90++Rebel+Alliance+%EF%87%90%22+-ForegroundColor+red%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Write-Host+%22++++++++++++++++++%F3%B1%8B%8C++%22+-NoNewline%27%0D%0A++++Add-IfNotExists+%24profilePath+%27Write-Host++%28Invoke-WebRequest+-UseBasicParsing+ifconfig.me%2Fip%29.Content.Trim%28%29+%F3%B1%8B%8C%27%0D%0A%0D%0A++++Write-Host+%22PowerShell+profile+created%2Fupdated+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Failed+to+create+or+update+PowerShell+profile.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Set+execution+policy+to+Unrestricted+for+current+user%0D%0Atry+%7B%0D%0A++++Set-ExecutionPolicy+-ExecutionPolicy+Unrestricted+-Scope+CurrentUser+-Force%0D%0A++++Write-Host+%22Execution+policy+set+to+Unrestricted.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Failed+to+set+execution+policy.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Download+custom+Oh+My+Posh+theme+if+Oh+My+Posh+is+installed%0D%0Aif+%28Get-Command+oh-my-posh+-ErrorAction+SilentlyContinue%29+%7B%0D%0A++++try+%7B%0D%0A++++++++%24themePath+%3D+%22%24env%3ALOCALAPPDATA%5CPrograms%5Coh-my-posh%5Cthemes%5Cpentescatination.omp.json%22%0D%0A++++++++Invoke-WebRequest+-Uri+%22https%3A%2F%2Fraw.githubusercontent.com%2Fsurgatengit%2FProcrastinateshell%2Fmain%2Fpentescatination.omp.json%22+-OutFile+%24themePath%0D%0A++++++++Write-Host+%22Custom+theme+downloaded+successfully.%22%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Failed+to+download+custom+theme.+Continuing...%22%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22Oh+My+Posh+not+found%2C+skipping+theme+download.%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Terminal+Icons%0D%0Atry+%7B%0D%0A++++Install-Module+-Name+Terminal-Icons+-Force%0D%0A++++Write-Host+%22Terminal+Icons+module+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Failed+to+install+Terminal+Icons.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Git+%28required+for+posh-git%29%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Git.Git+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Git+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Git+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+posh-git+%28if+Git+is+installed%29%0D%0Aif+%28Get-Command+git+-ErrorAction+SilentlyContinue%29+%7B%0D%0A++++try+%7B%0D%0A++++++++Install-Module+posh-git+-Scope+CurrentUser+-Force%0D%0A++++++++Write-Host+%22posh-git+installed+successfully.%22%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22posh-git+installation+failed.+Continuing...%22%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22Git+not+found%2C+skipping+posh-git+installation.%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Firefox%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Mozilla.Firefox+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Firefox+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Firefox+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+LightShot%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Skillbrains.Lightshot+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Lightshot+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Lightshot+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+MobaXterm%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Mobatek.MobaXterm+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22MobaXterm+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22MobaXterm+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Nmap%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Insecure.Nmap+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Nmap+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Nmap+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Powertoys%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Microsoft.PowerToys+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22PowerToys+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22PowerToys+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+VisualStudioCode%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Microsoft.VisualStudioCode+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Visual+Studio+Code+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Visual+Studio+Code+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+7zip%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+7zip.7zip+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%227zip+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%227zip+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Install+Obsidian%0D%0Atry+%7B%0D%0A++++winget+install+-e+%2D%2Did+Obsidian.Obsidian+%2D%2Daccept-package-agreements+%2D%2Daccept-source-agreements+%2D%2Dsilent%0D%0A++++Write-Host+%22Obsidian+installed+successfully.%22%0D%0A%7D+catch+%7B%0D%0A++++Write-Host+%22Obsidian+installation+failed.+Continuing...%22%0D%0A%7D%0D%0A%0D%0A%23+Update+PowerShell+Help%0D%0Aif+%28-not+%28Get-Help+-ErrorAction+SilentlyContinue%29%29+%7B%0D%0A++++try+%7B%0D%0A++++++++Update-Help%0D%0A++++++++Write-Host+%22PowerShell+Help+updated+successfully.%22%0D%0A++++%7D+catch+%7B%0D%0A++++++++Write-Host+%22Failed+to+update+PowerShell+Help.+Continuing...%22%0D%0A++++%7D%0D%0A%7D+else+%7B%0D%0A++++Write-Host+%22PowerShell+Help+is+already+updated.%22%0D%0A%7D%0D%0A%0D%0AWrite-Host+%22Script+execution+completed%21%22+-ForegroundColor+Green%0D%0AWrite-Host+%22Please+reload+powershell+terminal%21%22+-ForegroundColor+Green%0D%0A%0D%0A&FirstLogonScriptType0=Ps1&WdacMode=Skip-->
+	<settings pass="offlineServicing"></settings>
+	<settings pass="windowsPE">
+		<component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<SetupUILanguage>
+				<UILanguage>es-ES</UILanguage>
+			</SetupUILanguage>
+			<InputLocale>0c0a:0000040a</InputLocale>
+			<SystemLocale>es-ES</SystemLocale>
+			<UILanguage>es-ES</UILanguage>
+			<UserLocale>es-ES</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<ImageInstall>
+				<OSImage>
+					<InstallTo>
+						<DiskID>0</DiskID>
+						<PartitionID>3</PartitionID>
+					</InstallTo>
+				</OSImage>
+			</ImageInstall>
+			<UserData>
+				<ProductKey>
+					<Key>WYPNQ-8C467-V2W6J-TX4WX-WT2RQ</Key>
+				</ProductKey>
+				<AcceptEula>true</AcceptEula>
+			</UserData>
+			<RunSynchronous>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo SELECT DISK=0"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo CLEAN"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo CONVERT GPT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>4</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo CREATE PARTITION EFI SIZE=300"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>5</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo FORMAT QUICK FS=FAT32 LABEL="System""</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>6</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo CREATE PARTITION MSR SIZE=16"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>7</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo CREATE PARTITION PRIMARY"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>8</Order>
+					<Path>cmd.exe /c "&gt;&gt;"X:\diskpart.txt" echo FORMAT QUICK FS=NTFS LABEL="Windows""</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>9</Order>
+					<Path>cmd.exe /c "diskpart.exe /s "X:\diskpart.txt" &gt;&gt;"X:\diskpart.log" || ( type "X:\diskpart.log" &amp; echo diskpart encountered an error. &amp; pause &amp; exit /b 1 )"</Path>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+	</settings>
+	<settings pass="generalize"></settings>
+	<settings pass="specialize">
+		<component name="Microsoft-Windows-Deployment" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<RunSynchronous>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v BypassNRO /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<Path>reg.exe delete "HKLM\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\DevHomeUpdate" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>3</Order>
+					<Path>cmd.exe /c "del "C:\Users\Default\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk""</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>4</Order>
+					<Path>cmd.exe /c "del "C:\Windows\System32\OneDriveSetup.exe""</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>5</Order>
+					<Path>cmd.exe /c "del "C:\Windows\SysWOW64\OneDriveSetup.exe""</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>6</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>7</Order>
+					<Path>reg.exe delete "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Run" /v OneDriveSetup /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>8</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>9</Order>
+					<Path>reg.exe delete "HKLM\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\OutlookUpdate" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>10</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Communications" /v ConfigureChatAutoInstall /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>11</Order>
+					<Path>powershell.exe -NoProfile -Command "$xml = [xml]::new(); $xml.Load('C:\Windows\Panther\unattend.xml'); $sb = [scriptblock]::Create( $xml.unattend.Extensions.ExtractScript ); Invoke-Command -ScriptBlock $sb -ArgumentList $xml;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>12</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Temp\remove-packages.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>13</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Temp\remove-caps.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>14</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Temp\remove-features.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>15</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start" /v ConfigureStartPins /t REG_SZ /d "{ \"pinnedList\": [] }" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>16</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start" /v ConfigureStartPins_ProviderSet /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>17</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\PolicyManager\current\device\Start" /v ConfigureStartPins_WinningProvider /t REG_SZ /d B5292708-1619-419B-9923-E5D9F3925E71 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>18</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-419B-9923-E5D9F3925E71\default\Device\Start" /v ConfigureStartPins /t REG_SZ /d "{ \"pinnedList\": [] }" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>19</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\PolicyManager\providers\B5292708-1619-419B-9923-E5D9F3925E71\default\Device\Start" /v ConfigureStartPins_LastWrite /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>20</Order>
+					<Path>net.exe accounts /maxpwage:UNLIMITED</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>21</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>22</Order>
+					<Path>reg.exe add "HKU\DefaultUser\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>23</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>24</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\ShowAllTrayIcons.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>25</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\DeleteTaskbarIcons.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>26</Order>
+					<Path>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /v LongPathsEnabled /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>27</Order>
+					<Path>powershell.exe -NoProfile -Command "Set-ExecutionPolicy -Scope 'LocalMachine' -ExecutionPolicy 'RemoteSigned' -Force;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>28</Order>
+					<Path>fsutil.exe behavior set disableLastAccess 1</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>29</Order>
+					<Path>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>30</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Dsh" /v AllowNewsAndInterests /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>31</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>32</Order>
+					<Path>powershell.exe -NoProfile -Command "Get-Content -LiteralPath '%TEMP%\sounds.ps1' -Raw | Invoke-Expression;"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>33</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "NoSounds" /t REG_SZ /d "reg.exe add \"HKCU\AppEvents\Schemes\" /ve /t REG_SZ /d \".None\" /f" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>34</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>35</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\BootAnimation" /v DisableStartupSound /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>36</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\EditionOverrides" /v UserSetting_DisableStartupSound /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>37</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>38</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "ContentDeliveryAllowed" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>39</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "FeatureManagementEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>40</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "OEMPreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>41</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>42</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "PreInstalledAppsEverEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>43</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SilentInstalledAppsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>44</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SoftLandingEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>45</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContentEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>46</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-310093Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>47</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338387Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>48</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338388Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>49</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338389Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>50</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-338393Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>51</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SubscribedContent-353698Enabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>52</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "SystemPaneSuggestionsEnabled" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>53</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>54</Order>
+					<Path>reg.exe add "HKLM\Software\Policies\Microsoft\Windows\CloudContent" /v "DisableWindowsConsumerFeatures" /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>55</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>56</Order>
+					<Path>reg.exe add "HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v "ClassicContextMenu" /t REG_SZ /d "reg.exe add \"HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32\" /ve /f" /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>57</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>58</Order>
+					<Path>reg.exe load "HKU\DefaultUser" "C:\Users\Default\NTUSER.DAT"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>59</Order>
+					<Path>reg.exe add "HKU\DefaultUser\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v TaskbarAl /t REG_DWORD /d 0 /f</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>60</Order>
+					<Path>reg.exe unload "HKU\DefaultUser"</Path>
+				</RunSynchronousCommand>
+				<RunSynchronousCommand wcm:action="add">
+					<Order>61</Order>
+					<Path>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v HideFirstRunExperience /t REG_DWORD /d 1 /f</Path>
+				</RunSynchronousCommand>
+			</RunSynchronous>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<TimeZone>Romance Standard Time</TimeZone>
+		</component>
+	</settings>
+	<settings pass="auditSystem"></settings>
+	<settings pass="auditUser"></settings>
+	<settings pass="oobeSystem">
+		<component name="Microsoft-Windows-International-Core" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<InputLocale>0c0a:0000040a</InputLocale>
+			<SystemLocale>es-ES</SystemLocale>
+			<UILanguage>es-ES</UILanguage>
+			<UserLocale>es-ES</UserLocale>
+		</component>
+		<component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
+			<UserAccounts>
+				<LocalAccounts>
+					<LocalAccount wcm:action="add">
+						<Name>Admin</Name>
+						<Group>Administrators</Group>
+						<Password>
+							<Value>Zaq123456</Value>
+							<PlainText>true</PlainText>
+						</Password>
+					</LocalAccount>
+					<LocalAccount wcm:action="add">
+						<Name>Usuario</Name>
+						<Group>Users</Group>
+						<Password>
+							<Value>Zaq123456</Value>
+							<PlainText>true</PlainText>
+						</Password>
+					</LocalAccount>
+				</LocalAccounts>
+			</UserAccounts>
+			<AutoLogon>
+				<Username>Admin</Username>
+				<Enabled>true</Enabled>
+				<LogonCount>1</LogonCount>
+				<Password>
+					<Value>Zaq123456</Value>
+					<PlainText>true</PlainText>
+				</Password>
+			</AutoLogon>
+			<OOBE>
+				<ProtectYourPC>3</ProtectYourPC>
+				<HideEULAPage>true</HideEULAPage>
+				<HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+			</OOBE>
+			<FirstLogonCommands>
+				<SynchronousCommand wcm:action="add">
+					<Order>1</Order>
+					<CommandLine>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoLogonCount /t REG_DWORD /d 0 /f</CommandLine>
+				</SynchronousCommand>
+				<SynchronousCommand wcm:action="add">
+					<Order>2</Order>
+					<CommandLine>cmd.exe /c "powershell.exe -NoProfile -Command "Get-Content -LiteralPath 'C:\Windows\Setup\Scripts\unattend-01.ps1' -Raw | Invoke-Expression;" &gt;&gt;"C:\Windows\Setup\Scripts\unattend-01.log" 2&gt;&amp;1"</CommandLine>
+				</SynchronousCommand>
+			</FirstLogonCommands>
+		</component>
+	</settings>
+	<Extensions xmlns="https://schneegans.de/windows/unattend-generator/">
+		<ExtractScript>
+param(
+    [xml] $Document
+);
+
+$scriptsDir = 'C:\Windows\Setup\Scripts\';
+foreach( $file in $Document.unattend.Extensions.File ) {
+    $path = [System.Environment]::ExpandEnvironmentVariables(
+        $file.GetAttribute( 'path' )
+    );
+    if( $path.StartsWith( $scriptsDir ) ) {
+        mkdir -Path $scriptsDir -ErrorAction 'SilentlyContinue';
+    }
+    $encoding = switch( [System.IO.Path]::GetExtension( $path ) ) {
+        { $_ -in '.ps1', '.xml' } { [System.Text.Encoding]::UTF8; }
+        { $_ -in '.reg', '.vbs', '.js' } { [System.Text.UnicodeEncoding]::new( $false, $true ); }
+        default { [System.Text.Encoding]::Default; }
+    };
+    [System.IO.File]::WriteAllBytes( $path, ( $encoding.GetPreamble() + $encoding.GetBytes( $file.InnerText.Trim() ) ) );
+}
+		</ExtractScript>
+		<File path="C:\Windows\Temp\remove-packages.ps1">
+$selectors = @(
+	'Microsoft.Microsoft3DViewer';
+	'Microsoft.BingSearch';
+	'Microsoft.WindowsCamera';
+	'Clipchamp.Clipchamp';
+	'Microsoft.549981C3F5F10';
+	'Microsoft.Windows.DevHome';
+	'MicrosoftCorporationII.MicrosoftFamily';
+	'Microsoft.WindowsFeedbackHub';
+	'Microsoft.Getstarted';
+	'microsoft.windowscommunicationsapps';
+	'Microsoft.WindowsMaps';
+	'Microsoft.MixedReality.Portal';
+	'Microsoft.BingNews';
+	'Microsoft.MicrosoftOfficeHub';
+	'Microsoft.Office.OneNote';
+	'Microsoft.OutlookForWindows';
+	'Microsoft.Paint';
+	'Microsoft.MSPaint';
+	'Microsoft.People';
+	'Microsoft.Windows.Photos';
+	'Microsoft.PowerAutomateDesktop';
+	'MicrosoftCorporationII.QuickAssist';
+	'Microsoft.SkypeApp';
+	'Microsoft.MicrosoftSolitaireCollection';
+	'Microsoft.MicrosoftStickyNotes';
+	'MicrosoftTeams';
+	'MSTeams';
+	'Microsoft.Todos';
+	'Microsoft.WindowsSoundRecorder';
+	'Microsoft.BingWeather';
+	'Microsoft.Xbox.TCUI';
+	'Microsoft.XboxApp';
+	'Microsoft.XboxGameOverlay';
+	'Microsoft.XboxGamingOverlay';
+	'Microsoft.XboxIdentityProvider';
+	'Microsoft.XboxSpeechToTextOverlay';
+	'Microsoft.GamingApp';
+	'Microsoft.YourPhone';
+	'Microsoft.ZuneMusic';
+	'Microsoft.ZuneVideo';
+);
+$getCommand = { Get-AppxProvisionedPackage -Online; };
+$filterCommand = { $_.DisplayName -eq $selector; };
+$removeCommand = {
+  [CmdletBinding()]
+  param(
+    [Parameter( Mandatory, ValueFromPipeline )]
+    $InputObject
+  );
+  process {
+    $InputObject | Remove-AppxProvisionedPackage -AllUsers -Online -ErrorAction 'Continue';
+  }
+};
+$type = 'Package';
+$logfile = 'C:\Windows\Temp\remove-packages.log';
+&amp; {
+	$installed = &amp; $getCommand;
+	foreach( $selector in $selectors ) {
+		$result = [ordered] @{
+			Selector = $selector;
+		};
+		$found = $installed | Where-Object -FilterScript $filterCommand;
+		if( $found ) {
+			$result.Output = $found | &amp; $removeCommand;
+			if( $? ) {
+				$result.Message = "$type removed.";
+			} else {
+				$result.Message = "$type not removed.";
+				$result.Error = $Error[0];
+			}
+		} else {
+			$result.Message = "$type not installed.";
+		}
+		$result | ConvertTo-Json -Depth 3 -Compress;
+	}
+} *&gt;&amp;1 &gt;&gt; $logfile;
+		</File>
+		<File path="C:\Windows\Temp\remove-caps.ps1">
+$selectors = @(
+	'Browser.InternetExplorer';
+	'MathRecognizer';
+	'Microsoft.Windows.Notepad';
+	'Microsoft.Windows.Notepad.System';
+	'OpenSSH.Client';
+	'Microsoft.Windows.MSPaint';
+	'Microsoft.Windows.PowerShell.ISE';
+	'App.Support.QuickAssist';
+	'App.StepsRecorder';
+	'Media.WindowsMediaPlayer';
+	'Microsoft.Windows.WordPad';
+);
+$getCommand = { Get-WindowsCapability -Online; };
+$filterCommand = { ($_.Name -split '~')[0] -eq $selector; };
+$removeCommand = {
+  [CmdletBinding()]
+  param(
+    [Parameter( Mandatory, ValueFromPipeline )]
+    $InputObject
+  );
+  process {
+    $InputObject | Remove-WindowsCapability -Online -ErrorAction 'Continue';
+  }
+};
+$type = 'Capability';
+$logfile = 'C:\Windows\Temp\remove-caps.log';
+&amp; {
+	$installed = &amp; $getCommand;
+	foreach( $selector in $selectors ) {
+		$result = [ordered] @{
+			Selector = $selector;
+		};
+		$found = $installed | Where-Object -FilterScript $filterCommand;
+		if( $found ) {
+			$result.Output = $found | &amp; $removeCommand;
+			if( $? ) {
+				$result.Message = "$type removed.";
+			} else {
+				$result.Message = "$type not removed.";
+				$result.Error = $Error[0];
+			}
+		} else {
+			$result.Message = "$type not installed.";
+		}
+		$result | ConvertTo-Json -Depth 3 -Compress;
+	}
+} *&gt;&amp;1 &gt;&gt; $logfile;
+		</File>
+		<File path="C:\Windows\Temp\remove-features.ps1">
+$selectors = @(
+	'Recall';
+);
+$getCommand = { Get-WindowsOptionalFeature -Online; };
+$filterCommand = { $_.FeatureName -eq $selector; };
+$removeCommand = {
+  [CmdletBinding()]
+  param(
+    [Parameter( Mandatory, ValueFromPipeline )]
+    $InputObject
+  );
+  process {
+    $InputObject | Disable-WindowsOptionalFeature -Online -Remove -NoRestart -ErrorAction 'Continue';
+  }
+};
+$type = 'Feature';
+$logfile = 'C:\Windows\Temp\remove-features.log';
+&amp; {
+	$installed = &amp; $getCommand;
+	foreach( $selector in $selectors ) {
+		$result = [ordered] @{
+			Selector = $selector;
+		};
+		$found = $installed | Where-Object -FilterScript $filterCommand;
+		if( $found ) {
+			$result.Output = $found | &amp; $removeCommand;
+			if( $? ) {
+				$result.Message = "$type removed.";
+			} else {
+				$result.Message = "$type not removed.";
+				$result.Error = $Error[0];
+			}
+		} else {
+			$result.Message = "$type not installed.";
+		}
+		$result | ConvertTo-Json -Depth 3 -Compress;
+	}
+} *&gt;&amp;1 &gt;&gt; $logfile;
+		</File>
+		<File path="C:\Users\Default\AppData\Local\Microsoft\Windows\Shell\LayoutModification.xml"><![CDATA[
+<LayoutModificationTemplate Version="1" xmlns="http://schemas.microsoft.com/Start/2014/LayoutModification">
+	<LayoutOptions StartTileGroupCellWidth="6" />
+	<DefaultLayoutOverride>
+		<StartLayoutCollection>
+			<StartLayout GroupCellWidth="6" xmlns="http://schemas.microsoft.com/Start/2014/FullDefaultLayout" />
+		</StartLayoutCollection>
+	</DefaultLayoutOverride>
+</LayoutModificationTemplate>
+		]]></File>
+		<File path="C:\Windows\Setup\Scripts\ShowAllTrayIcons.ps1">
+reg.exe load 'HKU\DefaultUser' 'C:\Users\Default\NTUSER.DAT';
+
+if( [System.Environment]::OSVersion.Version.Build -lt 20000 ) {
+	# Windows 10
+	Set-ItemProperty -LiteralPath 'Registry::HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Explorer' -Name 'EnableAutoTray' -Type 'DWord' -Value 0 -Force;
+} else {
+	# Windows 11
+	$command = 'powershell.exe -NoProfile -Command "{0}"' -f {
+		Set-Location -LiteralPath 'HKCU:\';
+		Get-Item -Path 'HKCU:\Control Panel\NotifyIconSettings\*' -ErrorAction 'SilentlyContinue' | ForEach-Object -Process {
+			$_ | Set-ItemProperty -Name 'IsPromoted' -Value 1 -Type 'DWord';
+		};
+	};
+	Set-ItemProperty -LiteralPath 'Registry::HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\Run' -Name 'ShowAllTrayIcons' -Type 'String' -Value $command -Force;
+}
+
+reg.exe unload 'HKU\DefaultUser';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\DeleteTaskbarIcons.ps1">
+reg.exe load 'HKU\DefaultUser' 'C:\Users\Default\NTUSER.DAT';
+
+$command = 'powershell.exe -NoProfile -Command "{0}"' -f { Remove-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband' '*'; Get-Process 'explorer' | Where-Object { $_.SI -eq (Get-Process -Id $PID).SI; } | Stop-Process; };
+Set-ItemProperty -LiteralPath 'Registry::HKU\DefaultUser\Software\Microsoft\Windows\CurrentVersion\RunOnce' -Name 'DeleteTaskbarIcons' -Type 'String' -Value $command -Force;
+
+reg.exe unload 'HKU\DefaultUser';
+		</File>
+		<File path="%TEMP%\sounds.ps1">
+$mountKey = 'DefaultUser';
+New-PSDrive -PSProvider 'Registry' -Root 'HKEY_USERS' -Name 'HKU';
+$excludes = Get-ChildItem -LiteralPath "HKU:\${mountKey}\AppEvents\EventLabels" |
+    Where-Object -FilterScript { ($_ | Get-ItemProperty).ExcludeFromCPL -eq 1; } |
+    Select-Object -ExpandProperty 'PSChildName';
+Get-ChildItem -Path "HKU:\${mountKey}\AppEvents\Schemes\Apps\*\*" |
+    Where-Object -Property 'PSChildName' -NotIn $excludes |
+    Get-ChildItem -Include '.Current' | Set-ItemProperty -Name '(default)' -Value '';
+Remove-PSDrive -Name 'HKU';
+		</File>
+		<File path="C:\Windows\Setup\Scripts\unattend-01.ps1">
+# Script designed to be run after a fresh Windows installation or format. It installs essential programs and what might be the best shell configuration ever created: ProcrastinateShell.
+
+# Function to check if script is running as administrator
+function Test-Admin {
+    $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $principal = New-Object Security.Principal.WindowsPrincipal($currentIdentity)
+    return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+# Check for elevated permissions
+if (-not (Test-Admin)) {
+    Write-Host "This script requires elevated privileges (Administrator). Please run as Administrator." -ForegroundColor Red
+    exit
+}
+
+# Winget has never worked properly, especially on clean installations, even though it comes pre-installed. The installation is often broken, preventing it from running or updating. The best solution is to install it directly.
+# Function to get the version of Winget
+function Get-WingetVersion {
+    try {
+        $wingetVersion = winget --version
+        return $wingetVersion
+    } catch {
+        return $null
+    }
+}
+
+# Ensure Winget is installed and up-to-date
+$requiredWingetVersion = "v1.8.1911"
+$currentWingetVersion = winget -v
+
+if ($currentWingetVersion -and ($currentWingetVersion -ge $requiredWingetVersion)) {
+    Write-Host "Winget version $currentWingetVersion is already installed and up to date."
+} else {
+    Write-Host "Winget is either not installed or outdated. Installing version $requiredWingetVersion..."
+
+    # Download and install the latest version of Winget
+    try {
+        $wingetUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.8.1911/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+        $wingetDestination = "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
+
+        # Download the msixbundle
+        Write-Host "Downloading Winget from $wingetUrl..."
+        Start-BitsTransfer -Source $wingetUrl -Destination $wingetDestination
+
+        # Install Winget
+        Write-Host "Installing Winget..."
+        Add-AppxPackage -Path $wingetDestination
+
+        Write-Host "Winget version $requiredWingetVersion installed successfully."
+    } catch {
+        Write-Host "Failed to install Winget. Exiting script." -ForegroundColor Red
+        exit
+    }
+}
+
+# Function to check if PowerShell 7+ is running
+function Is-PowerShell7 {
+    return $PSVersionTable.PSVersion.Major -ge 7
+}
+
+# Ensure we're running PowerShell 7, if not, install it and exit the script
+if (-not (Is-PowerShell7)) {
+    Write-Host "PowerShell 7 or higher is required. Installing PowerShell 7..."
+    try {
+        winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
+        Write-Host "PowerShell 7 installed successfully."
+        Write-Host "Continue in PowerShell 7."
+        Start-Sleep -Seconds 2
+        # Switch to powershell 7
+        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
+        Start-Process "pwsh" -ArgumentList "-NoProfile -NoExit -File `"$desktopPath`""
+
+        exit
+    } catch {
+        Write-Host "PowerShell 7 installation failed. Exiting script."
+        exit
+    }
+} else {
+    Write-Host "PowerShell 7 is already running."
+}
+
+# Check and install Windows Terminal if not installed
+if (-not (Get-Command wt -ErrorAction SilentlyContinue)) {
+    Write-Host "Windows Terminal not found, installing..."
+    try {
+        winget install --id Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements --silent
+        Write-Host "Windows Terminal installed successfully."
+    } catch {
+        Write-Host "Windows Terminal installation failed. Exiting script."
+        exit
+    }
+} else {
+    Write-Host "Windows Terminal is already installed."
+}
+
+# Install Oh My Posh
+if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
+    try {
+        winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
+        Write-Host "Oh My Posh installed successfully. Reload"
+        
+        Start-Sleep -Seconds 1
+        # Launch another PowerShell to load the Oh My Posh commands
+        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
+        Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
+        Start-Sleep -Seconds 1
+        exit
+    } catch {
+        Write-Host "Oh My Posh installation failed. Continuing..."
+    }
+}
+
+# Check if the font is already installed
+function Is-FontInstalled {
+    param (
+        [string]$FontName
+    )
+    
+    $fontsPath = "$env:WINDIR\Fonts"
+    $installedFonts = Get-ChildItem -Path $fontsPath -Include "*.ttf", "*.otf" -Recurse | Select-String -Pattern $FontName
+
+    return $installedFonts.Count -gt 0
+}
+
+# Install Meslo Nerd Font and Hack Nerd Font via Oh My Posh if Oh My Posh is installed
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    try {
+        if (-not (Is-FontInstalled "Meslo")) {
+            oh-my-posh font install meslo
+            Write-Host "Meslo Nerd Font installed successfully."
+        } else {
+            Write-Host "Meslo Nerd Font is already installed."
+        }
+        
+        if (-not (Is-FontInstalled "Hack")) {
+            oh-my-posh font install hack
+            Write-Host "Hack Nerd Font installed successfully."
+        } else {
+            Write-Host "Hack Nerd Font is already installed."
+        }
+    } catch {
+        Write-Host "Failed to install Meslo and Hack Nerd Font using Oh My Posh. Continuing..."
+    }
+} else {
+    Write-Host "Oh My Posh not found, skipping font installation."
+}
+
+# Get the path of settings.json from Windows Terminal
+$terminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+
+# Ensure that settings.json exists before attempting to modify it
+if (-not (Test-Path $terminalSettingsPath)) {
+    Write-Host "Settings.json not found. Please ensure Windows Terminal is installed and run at least once." -ForegroundColor Red
+    exit
+}
+
+# Read the settings.json file
+$settingsJson = Get-Content -Path $terminalSettingsPath -Raw | ConvertFrom-Json
+
+# Create the 'defaults' section if it doesn't exist.
+if (-not $settingsJson.profiles.defaults) {
+    $settingsJson.profiles.defaults = @{}
+}
+
+# Create the 'font' section if it doesn't exist.
+if (-not $settingsJson.profiles.defaults.font) {
+    $settingsJson.profiles.defaults | Add-Member -MemberType NoteProperty -Name "font" -Value @{}
+}
+
+$settingsJson.profiles.defaults.font.face = "Hack Nerd Font"
+
+# Save changes to settings.json
+$settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsPath -Force
+
+Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
+
+# Get the correct profile path depending on PowerShell version
+$profilePath = if (Is-PowerShell7) {
+    "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
+} else {
+    "$env:USERPROFILE\Documents\WindowsPowerShell\profile.ps1"
+}
+
+# Create and edit PowerShell profile
+try {
+    if (-not (Test-Path $profilePath)) {
+        New-Item -Path $profilePath -Type File -Force
+    }
+
+    $profileContent = Get-Content -Path $profilePath -Raw
+
+    function Add-IfNotExists($path, $content) {
+        if (-not ($profileContent -contains $content)) {
+            Add-Content -Path $path -Value $content
+        }
+    }
+
+    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
+    Add-IfNotExists $profilePath 'Import-Module -Name Terminal-Icons'
+    Add-IfNotExists $profilePath '$env:POSH_GIT_ENABLED = $true'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionSource HistoryAndPlugin'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionViewStyle ListView'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -EditMode Windows'
+    Add-IfNotExists $profilePath 'Write-Host "                  Rebel Alliance " -ForegroundColor red'
+    Add-IfNotExists $profilePath 'Write-Host "                  󱋌  " -NoNewline'
+    Add-IfNotExists $profilePath 'Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌'
+
+    Write-Host "PowerShell profile created/updated successfully."
+} catch {
+    Write-Host "Failed to create or update PowerShell profile. Continuing..."
+}
+
+# Set execution policy to Unrestricted for current user
+try {
+    Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force
+    Write-Host "Execution policy set to Unrestricted."
+} catch {
+    Write-Host "Failed to set execution policy. Continuing..."
+}
+
+# Download custom Oh My Posh theme if Oh My Posh is installed
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    try {
+        $themePath = "$env:LOCALAPPDATA\Programs\oh-my-posh\themes\pentescatination.omp.json"
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" -OutFile $themePath
+        Write-Host "Custom theme downloaded successfully."
+    } catch {
+        Write-Host "Failed to download custom theme. Continuing..."
+    }
+} else {
+    Write-Host "Oh My Posh not found, skipping theme download."
+}
+
+# Install Terminal Icons
+try {
+    Install-Module -Name Terminal-Icons -Force
+    Write-Host "Terminal Icons module installed successfully."
+} catch {
+    Write-Host "Failed to install Terminal Icons. Continuing..."
+}
+
+# Install Git (required for posh-git)
+try {
+    winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Git installed successfully."
+} catch {
+    Write-Host "Git installation failed. Continuing..."
+}
+
+# Install posh-git (if Git is installed)
+if (Get-Command git -ErrorAction SilentlyContinue) {
+    try {
+        Install-Module posh-git -Scope CurrentUser -Force
+        Write-Host "posh-git installed successfully."
+    } catch {
+        Write-Host "posh-git installation failed. Continuing..."
+    }
+} else {
+    Write-Host "Git not found, skipping posh-git installation."
+}
+
+# Install Firefox
+try {
+    winget install -e --id Mozilla.Firefox --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Firefox installed successfully."
+} catch {
+    Write-Host "Firefox installation failed. Continuing..."
+}
+
+# Install LightShot
+try {
+    winget install -e --id Skillbrains.Lightshot --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Lightshot installed successfully."
+} catch {
+    Write-Host "Lightshot installation failed. Continuing..."
+}
+
+# Install MobaXterm
+try {
+    winget install -e --id Mobatek.MobaXterm --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "MobaXterm installed successfully."
+} catch {
+    Write-Host "MobaXterm installation failed. Continuing..."
+}
+
+# Install Nmap
+try {
+    winget install -e --id Insecure.Nmap --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Nmap installed successfully."
+} catch {
+    Write-Host "Nmap installation failed. Continuing..."
+}
+
+# Install Powertoys
+try {
+    winget install -e --id Microsoft.PowerToys --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "PowerToys installed successfully."
+} catch {
+    Write-Host "PowerToys installation failed. Continuing..."
+}
+
+# Install VisualStudioCode
+try {
+    winget install -e --id Microsoft.VisualStudioCode --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Visual Studio Code installed successfully."
+} catch {
+    Write-Host "Visual Studio Code installation failed. Continuing..."
+}
+
+# Install 7zip
+try {
+    winget install -e --id 7zip.7zip --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "7zip installed successfully."
+} catch {
+    Write-Host "7zip installation failed. Continuing..."
+}
+
+# Install Obsidian
+try {
+    winget install -e --id Obsidian.Obsidian --accept-package-agreements --accept-source-agreements --silent
+    Write-Host "Obsidian installed successfully."
+} catch {
+    Write-Host "Obsidian installation failed. Continuing..."
+}
+
+# Update PowerShell Help
+if (-not (Get-Help -ErrorAction SilentlyContinue)) {
+    try {
+        Update-Help
+        Write-Host "PowerShell Help updated successfully."
+    } catch {
+        Write-Host "Failed to update PowerShell Help. Continuing..."
+    }
+} else {
+    Write-Host "PowerShell Help is already updated."
+}
+
+Write-Host "Script execution completed!" -ForegroundColor Green
+Write-Host "Please reload powershell terminal!" -ForegroundColor Green
+		</File>
+	</Extensions>
+</unattend>
