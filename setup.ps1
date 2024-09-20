@@ -63,7 +63,7 @@ if (-not (Is-PowerShell7)) {
         winget install --id Microsoft.Powershell --source winget --accept-package-agreements --accept-source-agreements --silent
         Write-Host "PowerShell 7 installed successfully."
 
-        Write-Host "Please restart this script in PowerShell 7."
+        Write-Host "Please continue in PowerShell 7 running has administrator"
         exit
     } catch {
         Write-Host "PowerShell 7 installation failed. Exiting script."
@@ -124,20 +124,25 @@ $settingsJson = Get-Content -Path $terminalSettingsPath -Raw | ConvertFrom-Json
 
 # Crear la sección 'defaults' si no existe
 if (-not $settingsJson.profiles.defaults) {
-    $settingsJson.profiles.defaults = @{
-        font = @{
-            face = "Hack Nerd Font"
-        }
-    }
-} else {
-    # Modificar la fuente en la sección defaults
-    $settingsJson.profiles.defaults.font = @{
-        face = "Hack Nerd Font"
-    }
+    $settingsJson.profiles.defaults = @{}
 }
+
+# Verificar si la sección 'font' existe, si no, agregarla
+if (-not $settingsJson.profiles.defaults.font) {
+    $settingsJson.profiles.defaults | Add-Member -MemberType NoteProperty -Name "font" -Value @{}
+}
+
+# Modificar las propiedades del perfil 'defaults'
+$settingsJson.profiles.defaults.adjustIndistinguishableColors = "never"
+$settingsJson.profiles.defaults."experimental.retroTerminalEffect" = $false
+$settingsJson.profiles.defaults.font.face = "MesloLGM NF"
+$settingsJson.profiles.defaults.intenseTextStyle = "none"
+$settingsJson.profiles.defaults.opacity = 96
+$settingsJson.profiles.defaults.useAcrylic = $false
 
 # Guardar los cambios de nuevo en settings.json
 $settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsPath -Force
+
 
 Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
 
