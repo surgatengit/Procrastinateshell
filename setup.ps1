@@ -1,3 +1,5 @@
+# Script created to be run after the Windows installation is complete. It installs essential programs and possibly the best shell configuration ever made: ProcrastinateShell.
+
 # Function to check if script is running as administrator
 function Test-Admin {
     $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
@@ -64,7 +66,7 @@ if (-not (Is-PowerShell7)) {
         Write-Host "PowerShell 7 installed successfully."
         Write-Host "Continue in PowerShell 7."
         Start-Sleep -Seconds 2
-        # cambiar a powershell 7
+        # Switch to powershell 7
         $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
         Start-Process "pwsh" -ArgumentList "-NoProfile -NoExit -File `"$desktopPath`""
 
@@ -98,7 +100,7 @@ if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
         Write-Host "Oh My Posh installed successfully. Reload"
         
         Start-Sleep -Seconds 1
-        # lanzar otro powershell, para poder cargar los comandos de Oh My Posh
+        # Launch another PowerShell to load the Oh My Posh commands
         $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
         Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
         Start-Sleep -Seconds 1
@@ -143,32 +145,31 @@ if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
     Write-Host "Oh My Posh not found, skipping font installation."
 }
 
-# Obtener la ruta de settings.json de Windows Terminal
+# Get the path of settings.json from Windows Terminal
 $terminalSettingsPath = "$env:LOCALAPPDATA\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 
-# Asegurarse de que settings.json existe antes de intentar modificarlo
+# Ensure that settings.json exists before attempting to modify it
 if (-not (Test-Path $terminalSettingsPath)) {
     Write-Host "Settings.json not found. Please ensure Windows Terminal is installed and run at least once." -ForegroundColor Red
     exit
 }
 
-# Leer el contenido del archivo settings.json
+# Read the settings.json file
 $settingsJson = Get-Content -Path $terminalSettingsPath -Raw | ConvertFrom-Json
 
-# Crear la sección 'defaults' si no existe
+# Create the 'defaults' section if it doesn't exist.
 if (-not $settingsJson.profiles.defaults) {
     $settingsJson.profiles.defaults = @{}
 }
 
-# Verificar si la sección 'font' existe, si no, agregarla
+# Create the 'font' section if it doesn't exist.
 if (-not $settingsJson.profiles.defaults.font) {
     $settingsJson.profiles.defaults | Add-Member -MemberType NoteProperty -Name "font" -Value @{}
 }
 
-# Modificar las propiedades del perfil 'defaults'
 $settingsJson.profiles.defaults.font.face = "Hack Nerd Font"
 
-# Guardar los cambios de nuevo en settings.json
+# Save changes to settings.json
 $settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsPath -Force
 
 Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
@@ -185,15 +186,25 @@ try {
     if (-not (Test-Path $profilePath)) {
         New-Item -Path $profilePath -Type File -Force
     }
-    Add-Content -Path $profilePath -Value 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
-    Add-Content -Path $profilePath -Value 'Import-Module -Name Terminal-Icons'
-    Add-Content -Path $profilePath -Value '$env:POSH_GIT_ENABLED = $true'
-    Add-Content -Path $profilePath -Value 'Set-PSReadLineOption -PredictionSource HistoryAndPlugin'
-    Add-Content -Path $profilePath -Value 'Set-PSReadLineOption -PredictionViewStyle ListView'
-    Add-Content -Path $profilePath -Value 'Set-PSReadLineOption -EditMode Windows'
-    Add-Content -Path $profilePath -Value 'Write-Host "                  Rebel Alliance " -ForegroundColor red'
-    Add-Content -Path $profilePath -Value 'Write-Host "                  󱋌  " -NoNewline'
-    Add-Content -Path $profilePath -Value 'Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌'
+
+    $profileContent = Get-Content -Path $profilePath -Raw
+
+    function Add-IfNotExists($path, $content) {
+        if (-not ($profileContent -contains $content)) {
+            Add-Content -Path $path -Value $content
+        }
+    }
+
+    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
+    Add-IfNotExists $profilePath 'Import-Module -Name Terminal-Icons'
+    Add-IfNotExists $profilePath '$env:POSH_GIT_ENABLED = $true'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionSource HistoryAndPlugin'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionViewStyle ListView'
+    Add-IfNotExists $profilePath 'Set-PSReadLineOption -EditMode Windows'
+    Add-IfNotExists $profilePath 'Write-Host "                  Rebel Alliance " -ForegroundColor red'
+    Add-IfNotExists $profilePath 'Write-Host "                  󱋌  " -NoNewline'
+    Add-IfNotExists $profilePath 'Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌'
+
     Write-Host "PowerShell profile created/updated successfully."
 } catch {
     Write-Host "Failed to create or update PowerShell profile. Continuing..."
