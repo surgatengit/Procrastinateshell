@@ -1,14 +1,14 @@
-# Autounattend, installation script and ProcrastinateShell
+# Autounattend, installation script and ProcrastinateShell 2 steps
 
 ## Autounattend.xml File
-> Unattended installation of Windows, using the configuration listed below and the ProcrastinateShell script.
+> Unattended installation of Windows, using the configuration listed below.
 
 ### How to use:
 
 > On a Windows 11 ISO image downloaded from Microsoft, include this file in the root folder.
 
 When booting the computer or virtual machine with this ISO, it will perform a fully unattended installation of Windows, 
-with no user intervention, using the configuration listed below and the ProcrastinateShell script.
+with no user intervention, using the configuration listed below.
 
 > [!CAUTION]
 > It will erase all data on the disk without asking.
@@ -40,6 +40,14 @@ Generic Pro N for Workstations license.
 - [x] Remove all system sounds for all users by default.
 - [x] Remove suggested apps.
 - [x] Disable all telemetry.
+
+----
+## Step 2 Automatic Install Script
+The script ensures that the latest versions of winget, PowerShell, and Windows Terminal are functioning correctly on the system. It also customizes PowerShell 7 and installs or updates to the latest version the previously mentioned programs, in case they were not already installed or up to date.
+This automated process streamlines the setup and maintenance of essential tools, ensuring that the user always has access to the most recent features and security updates.
+> Download to admin Desktop setup.ps1 and run from elevated powershell.
+# Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern Windows, server flavour too.
+# Marvelous! :point_left:
 > Programs that will be installed
 - Powershell 7
 - Git
@@ -54,14 +62,6 @@ Generic Pro N for Workstations license.
 - Obsidian
 > [!NOTE]
 > An internet connection is required for the setup, but it won't ask you to use a Microsoft account or anything like that.
-----
-## You can also use the Automatic Install Script
-The script ensures that the latest versions of winget, PowerShell, and Windows Terminal are functioning correctly on the system. It also customizes PowerShell 7 and installs or updates to the latest version the previously mentioned programs, in case they were not already installed or up to date.
-This automated process streamlines the setup and maintenance of essential tools, ensuring that the user always has access to the most recent features and security updates.
-> Download setup.ps1 and run from elevated powershell.
-# Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern Windows, server flavour too.
-# Marvelous! :point_left:
-
 # The procrastinateShell:
 This is a customization for any shell, although it's primarily designed for PowerShell. Its main purpose is to provide contextual information and enhance screenshots taken during various penetration testing scenarios. However, it also includes additional features simply because they can be implemented and might prove useful.
 
