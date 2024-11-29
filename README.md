@@ -46,6 +46,9 @@ Generic Pro N for Workstations license.
 The script ensures that the latest versions of winget, PowerShell, and Windows Terminal are functioning correctly on the system. It also customizes PowerShell 7 and installs or updates to the latest version the previously mentioned programs, in case they were not already installed or up to date.
 This automated process streamlines the setup and maintenance of essential tools, ensuring that the user always has access to the most recent features and security updates.
 > Download to admin Desktop setup.ps1 and run from elevated powershell.
+
+> [!NOTE]
+> if winget error not recognized run this in powershell `Add-AppxPackage -RegisterByFamilyName -MainPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe`
 # Programs and :star2: ProcrastinateShell :star2: will be installed, in any modern Windows, server flavour too.
 # Marvelous! :point_left:
 > Programs that will be installed
