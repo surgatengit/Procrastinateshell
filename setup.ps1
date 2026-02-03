@@ -199,7 +199,7 @@ function Add-IfNotExists {
 
 # 4. Bloque de edición
 try {
-    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" | Invoke-Expression'
+    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
     Add-IfNotExists $profilePath 'Import-Module -Name Terminal-Icons'
     Add-IfNotExists $profilePath 'Import-Module CompletionPredictor'
     Add-IfNotExists $profilePath '$env:POSH_GIT_ENABLED = $true'
@@ -223,18 +223,31 @@ try {
     Write-Host "Failed to set execution policy. Continuing..."
 }
 
-# Download custom Oh My Posh theme if Oh My Posh is installed
-# if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
-#    try {
-#        $themePath = "$env:LOCALAPPDATA\Programs\oh-my-posh\themes\pentescatination.omp.json"
-#        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" -OutFile $themePath
-#        Write-Host "Custom theme downloaded successfully."
-#    } catch {
-#        Write-Host "Failed to download custom theme. Continuing..."
-#    }
-#} else {
-#    Write-Host "Oh My Posh not found, skipping theme download."
-#}
+# Descargar tema personalizado si Oh My Posh está instalado
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    try {
+        $themeDir = "$env:LOCALAPPDATA\Programs\oh-my-posh\themes"
+        $themePath = Join-Path $themeDir "pentescatination.omp.json"
+
+        # --- SOLUCIÓN: Crear la carpeta si no existe ---
+        if (-not (Test-Path $themeDir)) {
+            New-Item -Path $themeDir -ItemType Directory -Force | Out-Null
+            Write-Host "Carpeta de temas creada." -ForegroundColor Gray
+        }
+
+        Write-Host "Descargando tema personalizado..." -ForegroundColor Cyan
+        $url = "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json"
+        
+        # Descarga el archivo
+        Invoke-WebRequest -Uri $url -OutFile $themePath -ErrorAction Stop
+        
+        Write-Host "✅ Tema descargado con éxito en: $themePath" -ForegroundColor Green
+    } catch {
+        Write-Host "❌ Error al descargar el tema: $($_.Exception.Message)" -ForegroundColor Red
+    }
+} else {
+    Write-Host "Oh My Posh no encontrado, saltando descarga de tema." -ForegroundColor Yellow
+}
 
 # Install Terminal Icons
 try {
