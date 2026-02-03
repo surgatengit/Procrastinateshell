@@ -213,8 +213,6 @@ try {
     Write-Host "❌ Falló la actualización del perfil: $_" -ForegroundColor Red
 }
 
-
-
 # Set execution policy to Unrestricted for current user
 try {
     Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser -Force
@@ -265,7 +263,6 @@ try {
     Write-Host "Failed to install CompletionPredictor. Continuing..."
 }
 
-
 # Install Git (required for posh-git)
 try {
     winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements --silent
@@ -306,6 +303,7 @@ $apps = @(
     @{ id = "Microsoft.PowerToys"; name = "PowerToys" },
     @{ id = "Microsoft.VisualStudioCode"; name = "Visual Studio Code" },
     @{ id = "7zip.7zip"; name = "7zip" },
+    @{ id = "dnSpyEx.dnSpy"; name = "dnSpyEX" },
     @{ id = "Obsidian.Obsidian"; name = "Obsidian" }
 )
 
