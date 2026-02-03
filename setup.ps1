@@ -302,6 +302,7 @@ $apps = @(
     @{ id = "Mobatek.MobaXterm"; name = "MobaXterm" },
     @{ id = "Microsoft.PowerToys"; name = "PowerToys" },
     @{ id = "Microsoft.VisualStudioCode"; name = "Visual Studio Code" },
+    @{ id = "OpenVPNTechnologies.OpenVPNConnect"; name = "Visual Studio Code" },
     @{ id = "7zip.7zip"; name = "7zip" },
     @{ id = "dnSpyEx.dnSpy"; name = "dnSpyEX" },
     @{ id = "Obsidian.Obsidian"; name = "Obsidian" }
