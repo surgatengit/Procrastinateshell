@@ -199,7 +199,7 @@ function Add-IfNotExists {
 
 # 4. Bloque de edición
 try {
-    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
+    Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" | Invoke-Expression'
     Add-IfNotExists $profilePath 'Import-Module -Name Terminal-Icons'
     Add-IfNotExists $profilePath 'Import-Module CompletionPredictor'
     Add-IfNotExists $profilePath '$env:POSH_GIT_ENABLED = $true'
@@ -224,17 +224,17 @@ try {
 }
 
 # Download custom Oh My Posh theme if Oh My Posh is installed
-if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
-    try {
-        $themePath = "$env:LOCALAPPDATA\Programs\oh-my-posh\themes\pentescatination.omp.json"
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" -OutFile $themePath
-        Write-Host "Custom theme downloaded successfully."
-    } catch {
-        Write-Host "Failed to download custom theme. Continuing..."
-    }
-} else {
-    Write-Host "Oh My Posh not found, skipping theme download."
-}
+# if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+#    try {
+#        $themePath = "$env:LOCALAPPDATA\Programs\oh-my-posh\themes\pentescatination.omp.json"
+#        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/surgatengit/Procrastinateshell/main/pentescatination.omp.json" -OutFile $themePath
+#        Write-Host "Custom theme downloaded successfully."
+#    } catch {
+#        Write-Host "Failed to download custom theme. Continuing..."
+#    }
+#} else {
+#    Write-Host "Oh My Posh not found, skipping theme download."
+#}
 
 # Install Terminal Icons
 try {
