@@ -14,43 +14,48 @@ if (-not (Test-Admin)) {
 }
 
 # Winget has never worked properly, especially on clean installations, even though it comes pre-installed. The installation is often broken, preventing it from running or updating. The best solution is to install it directly.
-# Function to get the version of Winget
-function Get-WingetVersion {
-    try {
-        $wingetVersion = winget --version
-        return $wingetVersion
-    } catch {
-        return $null
+
+# 1. Obtener información de la última versión
+$repo = "microsoft/winget-cli"
+$urlApi = "https://api.github.com/repos/$repo/releases/latest"
+
+try {
+    Write-Host "Consultando última versión..." -ForegroundColor Cyan
+    $latestRelease = Invoke-RestMethod -Uri $urlApi
+    $latestVersionTag = $latestRelease.tag_name.Replace('v', '').Trim()
+    $requiredVersion = [version]$latestVersionTag
+    $downloadUrl = ($latestRelease.assets | Where-Object { $_.name -like "*.msixbundle" }).browser_download_url | Select-Object -First 1
+
+    # 2. Comprobar versión actual
+    $currentVersion = [version]"0.0.0.0"
+    if (Get-Command winget -ErrorAction SilentlyContinue) {
+        $currentVersion = [version](winget -v).Replace('v', '').Trim()
     }
-}
 
-# Ensure Winget is installed and up-to-date
-$requiredWingetVersion = "v1.8.1911"
-$currentWingetVersion = winget -v
+    if ($currentVersion -ge $requiredVersion) {
+        Write-Host "✅ Winget ya está actualizado ($currentVersion)." -ForegroundColor Green
+    } else {
+        Write-Host "🚀 Actualizando de $currentVersion a $requiredVersion..." -ForegroundColor Yellow
+        
+        $destination = "$env:USERPROFILE\Downloads\Winget_Update.msixbundle"
+        Invoke-WebRequest -Uri $downloadUrl -OutFile $destination
 
-if ($currentWingetVersion -and ($currentWingetVersion -ge $requiredWingetVersion)) {
-    Write-Host "Winget version $currentWingetVersion is already installed and up to date."
-} else {
-    Write-Host "Winget is either not installed or outdated. Installing version $requiredWingetVersion..."
+        # --- AQUÍ ESTÁ LA SOLUCIÓN AL ERROR 0x80073D02 ---
+        Write-Host "Cerrando procesos bloqueantes..." -ForegroundColor Gray
+        # Cerramos cualquier instancia de Winget o del instalador
+        Get-Process -Name "WinGet", "AppInstaller" -ErrorAction SilentlyContinue | Stop-Process -Force
+        Start-Sleep -Seconds 2 # Damos un respiro al sistema
 
-    # Download and install the latest version of Winget
-    try {
-        $wingetUrl = "https://github.com/microsoft/winget-cli/releases/download/v1.8.1911/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-        $wingetDestination = "$env:USERPROFILE\Downloads\Microsoft.DesktopAppInstaller.msixbundle"
-
-        # Download the msixbundle
-        Write-Host "Downloading Winget from $wingetUrl..."
-        Start-BitsTransfer -Source $wingetUrl -Destination $wingetDestination
-
-        # Install Winget
-        Write-Host "Installing Winget..."
-        Add-AppxPackage -Path $wingetDestination
-
-        Write-Host "Winget version $requiredWingetVersion installed successfully."
-    } catch {
-        Write-Host "Failed to install Winget. Exiting script." -ForegroundColor Red
-        exit
+        Write-Host "Instalando paquete (forzando cierre de aplicaciones)..."
+        # Usamos -ForceApplicationShutdown para que Windows mismo intente cerrar lo que estorbe
+        Add-AppxPackage -Path $destination -ForceApplicationShutdown -ErrorAction Stop
+        
+        Write-Host "✅ ¡Listo! Winget actualizado a la versión $requiredVersion." -ForegroundColor Green
+        Remove-Item $destination -ErrorAction SilentlyContinue
     }
+} catch {
+    Write-Host "❌ Error: $_" -ForegroundColor Red
+    Write-Host "Nota: Asegúrate de ejecutar PowerShell como ADMINISTRADOR." -ForegroundColor Yellow
 }
 
 # Function to check if PowerShell 7+ is running
@@ -79,63 +84,63 @@ if (-not (Is-PowerShell7)) {
     Write-Host "PowerShell 7 is already running."
 }
 
-# Check and install Windows Terminal if not installed
-if (-not (Get-Command wt -ErrorAction SilentlyContinue)) {
-    Write-Host "Windows Terminal not found, installing..."
-    try {
-        winget install --id Microsoft.WindowsTerminal -e --accept-package-agreements --accept-source-agreements --silent
-        Write-Host "Windows Terminal installed successfully."
-    } catch {
-        Write-Host "Windows Terminal installation failed. Exiting script."
-        exit
-    }
-} else {
-    Write-Host "Windows Terminal is already installed."
-}
-
-# Install Oh My Posh
-if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
-    try {
-        winget install JanDeDobbeleer.OhMyPosh -s winget --accept-package-agreements --accept-source-agreements --silent
-        Write-Host "Oh My Posh installed successfully. Reload"
-        Start-Sleep -Seconds 2
-        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
-        Start-Process "pwsh" -ArgumentList "-NoProfile -NoExit -File `"$desktopPath`""
-        # Revisar si poner un exit debajo
-        
-    } catch {
-        Write-Host "Oh My Posh installation failed. Continuing..."
-    }
-}
-
-# Check if the font is already installed
+# --- Función de detección mejorada ---
 function Is-FontInstalled {
     param (
         [string]$FontName
     )
-    
-    $fontsPath = "$env:WINDIR\Fonts"
-    $installedFonts = Get-ChildItem -Path $fontsPath -Include "*.ttf", "*.otf" -Recurse | Select-String -Pattern $FontName
+    # Rutas del registro donde Windows guarda las fuentes instaladas
+    $regPaths = @(
+        "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts",
+        "HKCU:\Software\Microsoft\Windows NT\CurrentVersion\Fonts"
+    )
 
-    return $installedFonts.Count -gt 0
+    foreach ($path in $regPaths) {
+        if (Test-Path $path) {
+            # Buscamos si alguna propiedad del registro contiene el nombre de la fuente
+            $fonts = Get-ItemProperty -Path $path
+            if ($fonts.PSObject.Properties.Name -like "*$FontName*") {
+                return $true
+            }
+        }
+    }
+    return $false
 }
 
-# Install Meslo Nerd Font and Hack Nerd Font via Oh My Posh if Oh My Posh is installed
-if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+# --- 1. Instalar Oh My Posh ---
+if (-not (Get-Command oh-my-posh -ErrorAction SilentlyContinue)) {
     try {
-        if (-not (Is-FontInstalled "Meslo")) {
-            oh-my-posh font install meslo
-            Start-Sleep -Seconds 2
-            oh-my-posh font install hack
-            Write-Host "Meslo and Hack both from Nerd Font installed successfully."
-        } else {
-            Write-Host "Meslo Nerd Font is already installed."
-        }
+        Write-Host "Instalando Oh My Posh..." -ForegroundColor Cyan
+        winget install JanDeDobbeleer.OhMyPosh --source winget --accept-package-agreements --accept-source-agreements --silent
+        Write-Host "Instalado. Reiniciando script para cargar variables..." -ForegroundColor Green
+        
+        $desktopPath = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "setup.ps1")
+        Start-Process "pwsh" -ArgumentList "-NoProfile -File `"$desktopPath`""
+        exit # Cerramos la sesión actual para evitar duplicidad
     } catch {
-        Write-Host "Failed to install Meslo and Hack Nerd Font using Oh My Posh. Continuing..."
+        Write-Host "Error instalando Oh My Posh." -ForegroundColor Red
     }
-} else {
-    Write-Host "Oh My Posh not found, skipping font installation."
+}
+
+# --- 2. Instalar Fuentes (si OMP existe) ---
+if (Get-Command oh-my-posh -ErrorAction SilentlyContinue) {
+    $fuentes = @("Meslo", "Hack")
+
+    foreach ($f in $fuentes) {
+        if (-not (Is-FontInstalled -FontName "$f*Nerd Font")) {
+            Write-Host "Instalando fuente $f..." -ForegroundColor Yellow
+            try {
+                # Usamos el nombre que oh-my-posh reconoce internamente
+                $nombreFuente = $f.ToLower()
+                oh-my-posh font install $nombreFuente
+                Write-Host "✅ $f instalada correctamente." -ForegroundColor Green
+            } catch {
+                Write-Host "❌ Error al instalar la fuente $f." -ForegroundColor Red
+            }
+        } else {
+            Write-Host "✅ La fuente $f ya está instalada. Saltando..." -ForegroundColor Gray
+        }
+    }
 }
 
 # Get the path of settings.json from Windows Terminal
@@ -167,41 +172,48 @@ $settingsJson | ConvertTo-Json -Depth 100 | Set-Content -Path $terminalSettingsP
 
 Write-Host "Settings.json updated with Hack Nerd Font and profiles." -ForegroundColor Green
 
-# Get the correct profile path depending on PowerShell version
-$profilePath = if (Is-PowerShell7) {
-    "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1"
-} else {
-    "$env:USERPROFILE\Documents\WindowsPowerShell\profile.ps1"
+# 1. Obtener la ruta del perfil de forma automática
+$profilePath = $PROFILE
+
+# 2. Crear el archivo si no existe
+if (-not (Test-Path $profilePath)) {
+    New-Item -Path $profilePath -Type File -Force
+    Write-Host "Archivo de perfil creado." -ForegroundColor Cyan
 }
 
-# Create and edit PowerShell profile
+# 3. Función de ayuda corregida
+function Add-IfNotExists {
+    param (
+        [string]$path,
+        [string]$line
+    )
+    # Leemos el archivo línea por línea (sin -Raw) para que sea un array
+    $currentContent = Get-Content -Path $path
+    
+    # Comprobamos si la línea ya existe en el array
+    if ($currentContent -notcontains $line) {
+        Add-Content -Path $path -Value $line
+        Write-Host "Añadido: $line" -ForegroundColor Gray
+    }
+}
+
+# 4. Bloque de edición
 try {
-    if (-not (Test-Path $profilePath)) {
-        New-Item -Path $profilePath -Type File -Force
-    }
-
-    $profileContent = Get-Content -Path $profilePath -Raw
-
-    function Add-IfNotExists($path, $content) {
-        if (-not ($profileContent -contains $content)) {
-            Add-Content -Path $path -Value $content
-        }
-    }
-
     Add-IfNotExists $profilePath 'oh-my-posh init pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/pentescatination.omp.json | Invoke-Expression'
     Add-IfNotExists $profilePath 'Import-Module -Name Terminal-Icons'
+    Add-IfNotExists $profilePath 'Import-Module CompletionPredictor'
     Add-IfNotExists $profilePath '$env:POSH_GIT_ENABLED = $true'
-    Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionSource HistoryAndPlugin'
     Add-IfNotExists $profilePath 'Set-PSReadLineOption -PredictionViewStyle ListView'
-    Add-IfNotExists $profilePath 'Set-PSReadLineOption -EditMode Windows'
     Add-IfNotExists $profilePath 'Write-Host "                  Rebel Alliance " -ForegroundColor red'
     Add-IfNotExists $profilePath 'Write-Host "                  󱋌  " -NoNewline'
     Add-IfNotExists $profilePath 'Write-Host  (Invoke-WebRequest -UseBasicParsing ifconfig.me/ip).Content.Trim() 󱋌'
 
-    Write-Host "PowerShell profile created/updated successfully."
+    Write-Host "✅ Perfil de PowerShell actualizado correctamente." -ForegroundColor Green
 } catch {
-    Write-Host "Failed to create or update PowerShell profile. Continuing..."
+    Write-Host "❌ Falló la actualización del perfil: $_" -ForegroundColor Red
 }
+
+
 
 # Set execution policy to Unrestricted for current user
 try {
@@ -232,6 +244,15 @@ try {
     Write-Host "Failed to install Terminal Icons. Continuing..."
 }
 
+# Install CompletionPredictor
+try {
+    Install-Module -Name CompletionPredictor -Force
+    Write-Host "CompletionPredictor module installed successfully."
+} catch {
+    Write-Host "Failed to install CompletionPredictor. Continuing..."
+}
+
+
 # Install Git (required for posh-git)
 try {
     winget install -e --id Git.Git --accept-package-agreements --accept-source-agreements --silent
@@ -258,7 +279,7 @@ function Install-App {
         [string]$AppName
     )
     try {
-        winget install -e --id $AppId --accept-package-agreements --accept-source-agreements --silent
+        winget install -e --id $AppId --accept-package-agreements --accept-source-agreements --silent --source winget
         Write-Host "$AppName installed successfully."
     } catch {
         Write-Host "$AppName installation failed. Continuing..."
@@ -267,10 +288,8 @@ function Install-App {
 
 # Lista de aplicaciones a instalar
 $apps = @(
-    @{ id = "Mozilla.Firefox"; name = "Firefox" },
-    @{ id = "Skillbrains.Lightshot"; name = "Lightshot" },
+    @{ id = "Mozilla.Firefox.es-ES"; name = "Firefox" },
     @{ id = "Mobatek.MobaXterm"; name = "MobaXterm" },
-    @{ id = "Insecure.Nmap"; name = "Nmap" },
     @{ id = "Microsoft.PowerToys"; name = "PowerToys" },
     @{ id = "Microsoft.VisualStudioCode"; name = "Visual Studio Code" },
     @{ id = "7zip.7zip"; name = "7zip" },
