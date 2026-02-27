@@ -327,9 +327,43 @@ Invoke-Step -Title "Instalando módulo CompletionPredictor" -Action {
 # -------------------------
 
 function Install-App {
-    param ([string]$AppId, [string]$AppName)
+    param(
+        [string]$AppId,
+        [string]$AppName,
+        [int]$TimeoutMinutes = 20,
+        [int]$HeartbeatSeconds = 30
+    )
+
+    $log = Join-Path $env:TEMP ("winget_{0}_{1:yyyyMMdd_HHmmss}.log" -f ($AppId -replace '[^a-zA-Z0-9\.-]', '_'), (Get-Date))
+
     Invoke-Step -Title "Instalando $AppName" -Action {
-        winget install -e --id $AppId --accept-package-agreements --accept-source-agreements --silent --source winget *> $null
+
+        $args = @(
+            "install", "-e", "--id", $AppId,
+            "--accept-package-agreements", "--accept-source-agreements",
+            "--source", "winget",
+            "--silent"
+        )
+
+        $p = Start-Process -FilePath "winget" -ArgumentList $args -PassThru -NoNewWindow `
+            -RedirectStandardOutput $log -RedirectStandardError $log
+
+        $deadline = (Get-Date).AddMinutes($TimeoutMinutes)
+
+        while (-not $p.HasExited) {
+            if ((Get-Date) -ge $deadline) {
+                try { $p.Kill() } catch {}
+                throw "Timeout ($TimeoutMinutes min). Revisa el log: $log"
+            }
+
+            # Heartbeat: indica que sigue vivo (sin ensuciar demasiado)
+            Write-Step -Message ("{0}: sigue instalando... (PID {1})" -f $AppName, $p.Id) -Level Info
+            Start-Sleep -Seconds $HeartbeatSeconds
+        }
+
+        if ($p.ExitCode -ne 0) {
+            throw "Winget devolvió ExitCode $($p.ExitCode). Revisa el log: $log"
+        }
     } | Out-Null
 }
 
