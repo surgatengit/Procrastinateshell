@@ -1,4 +1,9 @@
 # Script designed to be run after a fresh Windows installation or format. It installs essential programs and what might be the best shell configuration ever created: ProcrastinateShell.
+# Para lanzarlo desde el sistema, tenemos dos opciones, quitar la marca de internet, y luego cambiar la politica para el usuario actual, o hacer un bypass del script.
+# Unblock-File -Path .\setup.ps1
+# Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+# o usar para ejecutar sin cambiar la politica
+# powershell -ExecutionPolicy Bypass -File .\setup.ps1
 
 # Function to check if script is running as administrator
 function Test-Admin {
