@@ -6,6 +6,8 @@
 # o usar para ejecutar sin cambiar la politica
 # powershell -ExecutionPolicy Bypass -File .\setup.ps1
 
+# dnSpyEX se instala en C:\Users\<USER>\AppData\Local\Microsoft\WinGet\Packages\dnSpyEx.dnSpy_Microsoft.Winget.Source_8wekyb3d8bbwe
+
 # -------------------------
 # Helpers: UX + Admin + Download
 # -------------------------
