@@ -5,6 +5,8 @@
 # o usar para ejecutar sin cambiar la politica
 # powershell -ExecutionPolicy Bypass -File .\setup.ps1
 
+# dnSpyEX se instala en C:\Users\<USER>\AppData\Local\Microsoft\WinGet\Packages\dnSpyEx.dnSpy_Microsoft.Winget.Source_8wekyb3d8bbwe
+
 # Function to check if script is running as administrator
 function Test-Admin {
     $currentIdentity = [Security.Principal.WindowsIdentity]::GetCurrent()
